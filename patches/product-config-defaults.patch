@@ -1,0 +1,39 @@
+diff --git a/src/vs/base/common/product.ts b/src/vs/base/common/product.ts
+--- a/src/vs/base/common/product.ts
++++ b/src/vs/base/common/product.ts
+@@ -240,6 +240,8 @@ export interface IProductConfiguration {
+ 	readonly remoteDefaultExtensionsIfInstalledLocally?: string[];
+ 
+ 	readonly extensionConfigurationPolicy?: IStringDictionary<IPolicy>;
++
++	readonly configurationDefaults?: Record<string, unknown>;
+ }
+ 
+ export interface ITunnelApplicationConfig {
+diff --git a/src/vs/workbench/services/configuration/browser/configuration.ts b/src/vs/workbench/services/configuration/browser/configuration.ts
+--- a/src/vs/workbench/services/configuration/browser/configuration.ts
++++ b/src/vs/workbench/services/configuration/browser/configuration.ts
+@@ -28,6 +28,7 @@ import { isEmptyObject, isObject } from '../../../../base/common/types.js';
+ import { DefaultConfiguration as BaseDefaultConfiguration } from '../../../../platform/configuration/common/configurations.js';
+ import { IJSONEditingService } from '../common/jsonEditing.js';
+ import { IUserDataProfilesService } from '../../../../platform/userDataProfile/common/userDataProfile.js';
++import product from '../../../../platform/product/common/product.js';
+ 
+ export class DefaultConfiguration extends BaseDefaultConfiguration {
+ 
+@@ -46,6 +47,15 @@ export class DefaultConfiguration extends BaseDefaultConfiguration {
+ 		if (environmentService.options?.configurationDefaults) {
+ 			this.configurationRegistry.registerDefaultConfigurations([{ overrides: environmentService.options.configurationDefaults as IStringDictionary<IStringDictionary<unknown>> }]);
+ 		}
++		// Desktop/native: apply configurationDefaults from product.json
++		if (!environmentService.options?.configurationDefaults) {
++			const productDefaults = product.configurationDefaults;
++			if (productDefaults) {
++				this.configurationRegistry.registerDefaultConfigurations([{
++					overrides: productDefaults as IStringDictionary<IStringDictionary<unknown>>
++				}]);
++			}
++		}
+ 	}
+ 
+ 	protected override getConfigurationDefaultOverrides(): IStringDictionary<unknown> {

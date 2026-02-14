@@ -5,12 +5,13 @@
 # to run with Bash: "C:\Program Files\Git\bin\bash.exe" ./dev/build.sh
 ###
 
-export APP_NAME="VSCodium"
-export ASSETS_REPOSITORY="VSCodium/vscodium"
-export BINARY_NAME="codium"
+export APP_NAME="LASCO"
+export ASSETS_REPOSITORY="rocky-terracotta/lasco-demo"
+export BINARY_NAME="lasco"
 export CI_BUILD="no"
-export GH_REPO_PATH="VSCodium/vscodium"
-export ORG_NAME="VSCodium"
+export GH_REPO_PATH="rocky-terracotta/lasco-demo"
+export ORG_NAME="LASCO"
+export DISABLE_UPDATE="yes"
 export SHOULD_BUILD="yes"
 export SKIP_ASSETS="yes"
 export SKIP_BUILD="no"
@@ -136,6 +137,79 @@ if [[ "${SKIP_BUILD}" == "no" ]]; then
   fi
 
   . build.sh
+
+  # {{{ bundle LASCO extensions + workspace template
+  LASCO_DIR="$(cd "$(dirname "$0")/.." && pwd)/lasco"
+  LASCO_EXTS="${LASCO_DIR}/extensions"
+  LASCO_TMPL="${LASCO_DIR}/template"
+
+  if [[ "${OS_NAME}" == "osx" ]]; then
+    APP_DIR="VSCode-darwin-${VSCODE_ARCH}/LASCO.app/Contents/Resources"
+    EXT_DIR="${APP_DIR}/app/extensions"
+  elif [[ "${OS_NAME}" == "windows" ]]; then
+    APP_DIR="VSCode-win32-${VSCODE_ARCH}/resources"
+    EXT_DIR="${APP_DIR}/app/extensions"
+  elif [[ "${OS_NAME}" == "linux" ]]; then
+    APP_DIR="VSCode-linux-${VSCODE_ARCH}/resources"
+    EXT_DIR="${APP_DIR}/app/extensions"
+  else
+    echo "ERROR: Unknown OS_NAME '${OS_NAME}' — cannot determine app directory."
+    exit 1
+  fi
+
+  # --- Extensions (all VSIX-based) ---
+  for vsix_path in "${LASCO_EXTS}"/*.vsix; do
+    [[ -f "${vsix_path}" ]] || continue
+    VSIX_FILE="$(basename "${vsix_path}")"
+    # Skip Claude Code (handled separately below as platform-specific)
+    [[ "${VSIX_FILE}" == anthropic.claude-code-* ]] && continue
+    # Derive extension name: strip trailing -MAJOR.MINOR.PATCH.vsix
+    EXT_NAME="$(echo "${VSIX_FILE}" | sed -E 's/-[0-9]+\.[0-9]+\.[0-9]+\.vsix$//')"
+    TMP=$(mktemp -d)
+    unzip -qo "${vsix_path}" -d "${TMP}"
+    cp -r "${TMP}/extension" "${EXT_DIR}/${EXT_NAME}"
+    rm -rf "${TMP}"
+    echo "  Bundled: ${EXT_NAME}"
+  done
+
+  # Claude Code: platform-specific VSIX
+  case "${OS_NAME}" in
+    osx)     OS_NAME_MAP="darwin" ;;
+    windows) OS_NAME_MAP="win32" ;;
+    linux)   OS_NAME_MAP="linux" ;;
+  esac
+  CLAUDE_VSIX="${LASCO_EXTS}/anthropic.claude-code-2.1.39-${OS_NAME_MAP}-${VSCODE_ARCH}.vsix"
+  if [[ ! -f "${CLAUDE_VSIX}" ]]; then
+    echo "ERROR: Claude Code VSIX not found: ${CLAUDE_VSIX}"
+    exit 1
+  fi
+  TMP=$(mktemp -d)
+  unzip -qo "${CLAUDE_VSIX}" -d "${TMP}"
+  cp -r "${TMP}/extension" "${EXT_DIR}/anthropic.claude-code"
+  rm -rf "${TMP}"
+
+  # --- Encrypt PaddleOCR credentials into extension ---
+  LASCO_ENV="${LASCO_DIR}/../.env"
+  if [[ -f "${LASCO_ENV}" ]]; then
+    CRED_OUT="${EXT_DIR}/lasco/static/.lasco-credentials.enc"
+    node "$(dirname "$0")/encrypt-env.mjs" "${LASCO_ENV}" "${CRED_OUT}"
+    echo "Encrypted PaddleOCR credentials into lasco/static/"
+  else
+    echo "WARNING: .env not found — skipping credential encryption. OCR will require manual configuration."
+  fi
+
+  # --- Workspace Template ---
+  TMPL="${APP_DIR}/lasco-template"
+  rm -rf "${TMPL}"
+  cp -R "${LASCO_TMPL}/." "${TMPL}"
+  find "${TMPL}" -name '.DS_Store' -delete
+
+  # Install dependencies (replaces copying pre-built node_modules)
+  ( cd "${TMPL}" && npm ci --production )
+  ( cd "${TMPL}/scripts" && npm ci --production )
+
+  echo "Bundled LASCO extensions and workspace template"
+  # }}}
 
   if [[ -f "./include_${OS_NAME}.gypi" ]]; then
     mv ~/.gyp/include.gypi.pre-vscodium ~/.gyp/include.gypi

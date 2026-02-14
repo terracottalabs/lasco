@@ -309,5 +309,5 @@ index 299c728..9fb635d 100644
 @@ -28,3 +28,3 @@ const cliPath = process.env.VSCODE_FORWARDING_IS_DEV
  		process.platform === 'darwin' ? 'bin' : '../../bin',
 -		vscode.env.appQuality === 'stable' ? 'code-tunnel' : 'code-tunnel-insiders',
-+		'!!TUNNEL_APP_NAME!!'
++		'codium-tunnel'
  	) + (process.platform === 'win32' ? '.exe' : '');

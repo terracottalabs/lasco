@@ -10,7 +10,7 @@ index 3fd6b59..97a0e04 100644
  import { INotificationService } from '../../../../platform/notification/common/notification.js';
 +import { Registry } from '../../../../platform/registry/common/platform.js';
  
-@@ -156,2 +158,30 @@ class RunCommands extends Action2 {
+@@ -156,2 +158,28 @@ class RunCommands extends Action2 {
  
 +Registry.as<IConfigurationRegistry>('base.contributions.configuration')
 +	.registerConfiguration({
@@ -31,9 +31,7 @@ index 3fd6b59..97a0e04 100644
 +					description: nls.localize('commands.filters.value', "Authorization for the command."),
 +				},
 +				description: nls.localize('commands.filters', "Controls which commands are authorized to be executed."),
-+				default: {
-+					'workbench.action.terminal.newLocal': 'off'
-+				},
++				default: {},
 +				scope: ConfigurationScope.APPLICATION,
 +				tags: []
 +			},
@@ -65,11 +63,11 @@ index 93d1631..0533cf0 100644
  	) {
 @@ -35,2 +41,9 @@ export class CommandService extends Disposable implements ICommandService {
  		this._starActivation = null;
-+		this._commandFilters = this._configurationService.getValue('commands.filters') ?? { 'workbench.action.terminal.newLocal': 'off' };
++		this._commandFilters = this._configurationService.getValue('commands.filters') ?? {};
 +
 +		this._configurationService.onDidChangeConfiguration(async (event) => {
 +			if (event.affectsConfiguration('commands.filters')) {
-+				this._commandFilters = this._configurationService.getValue('commands.filters') ?? { 'workbench.action.terminal.newLocal': 'off' };
++				this._commandFilters = this._configurationService.getValue('commands.filters') ?? {};
 +			}
 +		})
  	}

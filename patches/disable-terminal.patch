@@ -1,0 +1,43 @@
+diff --git a/src/vs/workbench/browser/parts/titlebar/menubarControl.ts b/src/vs/workbench/browser/parts/titlebar/menubarControl.ts
+index 07137d3..3f4b151 100644
+--- a/src/vs/workbench/browser/parts/titlebar/menubarControl.ts
++++ b/src/vs/workbench/browser/parts/titlebar/menubarControl.ts
+@@ -7,7 +7,7 @@ import './media/menubarControl.css';
+ import { localize, localize2 } from '../../../../nls.js';
+ import { IMenuService, MenuId, IMenu, SubmenuItemAction, registerAction2, Action2, MenuItemAction, MenuRegistry } from '../../../../platform/actions/common/actions.js';
+ import { MenuBarVisibility, IWindowOpenable, getMenuBarVisibility, MenuSettings, hasNativeMenu } from '../../../../platform/window/common/window.js';
+-import { IContextKeyService } from '../../../../platform/contextkey/common/contextkey.js';
++import { ContextKeyExpr, IContextKeyService } from '../../../../platform/contextkey/common/contextkey.js';
+ import { IAction, Action, SubmenuAction, Separator, IActionRunner, ActionRunner, WorkbenchActionExecutedEvent, WorkbenchActionExecutedClassification, toAction } from '../../../../base/common/actions.js';
+ import { addDisposableListener, Dimension, EventType } from '../../../../base/browser/dom.js';
+ import { IKeybindingService } from '../../../../platform/keybinding/common/keybinding.js';
+@@ -102,7 +102,8 @@ MenuRegistry.appendMenuItem(MenuId.MenubarMainMenu, {
+ 		original: 'Terminal',
+ 		mnemonicTitle: localize({ key: 'mTerminal', comment: ['&& denotes a mnemonic'] }, "&&Terminal")
+ 	},
+-	order: 7
++	order: 7,
++	when: ContextKeyExpr.has('config.terminal.integrated.enabled')
+ });
+ 
+ MenuRegistry.appendMenuItem(MenuId.MenubarMainMenu, {
+diff --git a/src/vs/workbench/contrib/terminal/browser/terminal.contribution.ts b/src/vs/workbench/contrib/terminal/browser/terminal.contribution.ts
+index 40b580e..96eab05 100644
+--- a/src/vs/workbench/contrib/terminal/browser/terminal.contribution.ts
++++ b/src/vs/workbench/contrib/terminal/browser/terminal.contribution.ts
+@@ -9,6 +9,7 @@ import { Schemas } from '../../../../base/common/network.js';
+ import { URI } from '../../../../base/common/uri.js';
+ import * as nls from '../../../../nls.js';
+ import { Extensions as DragAndDropExtensions, IDragAndDropContributionRegistry, IDraggedResourceEditorInput } from '../../../../platform/dnd/browser/dnd.js';
++import { ContextKeyExpr } from '../../../../platform/contextkey/common/contextkey.js';
+ import { SyncDescriptor } from '../../../../platform/instantiation/common/descriptors.js';
+ import { InstantiationType, registerSingleton } from '../../../../platform/instantiation/common/extensions.js';
+ import { Registry } from '../../../../platform/registry/common/platform.js';
+@@ -116,6 +117,7 @@ Registry.as<IViewsRegistry>(ViewContainerExtensions.ViewsRegistry).registerViews
+ 	id: TERMINAL_VIEW_ID,
+ 	name: nls.localize2('terminal', "Terminal"),
+ 	containerIcon: terminalViewIcon,
++	when: ContextKeyExpr.has('config.terminal.integrated.enabled'),
+ 	canToggleVisibility: true,
+ 	canMoveView: true,
+ 	ctorDescriptor: new SyncDescriptor(TerminalViewPane),
