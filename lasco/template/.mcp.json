@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "your-server-name": {
+      "type": "http",
+      "url": "https://your-remote-mcp-server.example.com/mcp",
+      "headers": {
+        "x-api-key": "${LASCO_MCP_API_KEY}"
+      }
+    }
+  }
+}
