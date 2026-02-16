@@ -615,7 +615,7 @@
     "debug.toolBarLocation": "hidden",
     "extensions.autoUpdate": false,
     "extensions.autoCheckUpdates": false,
-    "workbench.startupEditor": "welcomePageInEmptyWorkbench",
+    "workbench.startupEditor": "none",
     "workbench.sideBar.location": "left",
     "workbench.panel.defaultLocation": "bottom",
     "workbench.enableExperiments": false,
