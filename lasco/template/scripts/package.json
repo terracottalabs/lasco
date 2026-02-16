@@ -6,6 +6,7 @@
     "@superdoc-dev/cli": "^0.1.0",
     "docx": "^9.5.1",
     "jszip": "^3.10.1",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "ws": "^8.18.0"
   }
 }

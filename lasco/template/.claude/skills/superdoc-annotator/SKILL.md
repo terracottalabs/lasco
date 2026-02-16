@@ -2,7 +2,7 @@
 name: superdoc-annotator
 description: Annotate, edit, and create DOCX files using the SuperDoc VS Code extension. Use when the user asks to "annotate this document", "add comments to this docx", "highlight text in this document", "add citations to this file", "link to sources in this document", "create a structured docx", "generate a legal document", "build a chronology docx", "add hyperlinks to this word file", or any request to manipulate or create DOCX files with annotations, comments, highlights, links, or structured content. Also triggers on "superdoc", "word document editing", or "docx manipulation".
 tools: Read, Write, Edit, Glob, Grep, Bash, Task
-allowed-tools: Bash(node scripts/superdoc-bridge.js:*), Bash(code --list-extensions:*)
+allowed-tools: Bash(scripts/lasco-node scripts/superdoc-bridge.js:*), Bash(code --list-extensions:*)
 ---
 
 # SuperDoc Annotator
@@ -23,7 +23,7 @@ If not installed, the commands still work — the DOCX files are valid and opena
 ### 1. getDocument — Extract text from DOCX
 
 ```bash
-node scripts/superdoc-bridge.js getDocument --file "<path>" --format text
+scripts/lasco-node scripts/superdoc-bridge.js getDocument --file "<path>" --format text
 ```
 - `--format text` returns plain text
 - `--format json` returns structured JSON with paragraph metadata
@@ -33,7 +33,7 @@ node scripts/superdoc-bridge.js getDocument --file "<path>" --format text
 ### 2. addComment — Add sidebar annotations
 
 ```bash
-node scripts/superdoc-bridge.js addComment --file "<path>" \
+scripts/lasco-node scripts/superdoc-bridge.js addComment --file "<path>" \
   --find "<text to anchor on>" \
   --author "<author name>" \
   --text "<comment text>" \
@@ -45,7 +45,7 @@ node scripts/superdoc-bridge.js addComment --file "<path>" \
 ### 3. addLink — Insert clickable hyperlinks
 
 ```bash
-node scripts/superdoc-bridge.js addLink --file "<path>" \
+scripts/lasco-node scripts/superdoc-bridge.js addLink --file "<path>" \
   --find "<text to anchor after>" \
   --url "<url>" \
   --no-refresh
@@ -58,7 +58,7 @@ Inserts `(URL)` as clickable blue/underlined text **after** the target text. Doe
 ### 4. addHighlight — Highlight text with color
 
 ```bash
-node scripts/superdoc-bridge.js addHighlight --file "<path>" \
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight --file "<path>" \
   --find "<text to highlight>" \
   --color "<hex color>" \
   --no-refresh
@@ -76,7 +76,7 @@ node scripts/superdoc-bridge.js addHighlight --file "<path>" \
 ### 5. suggestEdit — Add tracked changes (redlines)
 
 ```bash
-node scripts/superdoc-bridge.js suggestEdit --file "<path>" \
+scripts/lasco-node scripts/superdoc-bridge.js suggestEdit --file "<path>" \
   --find "<original text>" \
   --replace "<corrected text>" \
   --author "<author name>" \
@@ -88,7 +88,7 @@ node scripts/superdoc-bridge.js suggestEdit --file "<path>" \
 ### 6. insertText — Add text at start or end
 
 ```bash
-node scripts/superdoc-bridge.js insertText --file "<path>" \
+scripts/lasco-node scripts/superdoc-bridge.js insertText --file "<path>" \
   --at start|end \
   --text "<text to insert>" \
   --no-refresh
@@ -99,7 +99,7 @@ node scripts/superdoc-bridge.js insertText --file "<path>" \
 ### 7. createDocument — Build DOCX from JSON schema
 
 ```bash
-echo '<json>' | node scripts/superdoc-bridge.js createDocument --file "<output_path>"
+echo '<json>' | scripts/lasco-node scripts/superdoc-bridge.js createDocument --file "<output_path>"
 ```
 
 Builds a new `.docx` from a JSON content schema piped via stdin. See [JSON Schema Reference](#json-schema-reference-for-createdocument) below.
@@ -109,7 +109,7 @@ Builds a new `.docx` from a JSON content schema piped via stdin. See [JSON Schem
 ### 8. refresh — Trigger SuperDoc reload
 
 ```bash
-node scripts/superdoc-bridge.js refresh --file "<path>"
+scripts/lasco-node scripts/superdoc-bridge.js refresh --file "<path>"
 ```
 
 Touches the file timestamp to trigger VS Code file watcher. Call once after a batch of `--no-refresh` mutations.
@@ -132,12 +132,12 @@ Every mutation command supports `--no-refresh` to suppress the 200ms auto-refres
 
 ```bash
 # All mutations — no refresh
-node scripts/superdoc-bridge.js addComment   --file "doc.docx" --find "..." --text "..." --no-refresh
-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" --find "..." --color "#FFE0E0" --no-refresh
-node scripts/superdoc-bridge.js addLink      --file "doc.docx" --find "..." --url "..." --no-refresh
+scripts/lasco-node scripts/superdoc-bridge.js addComment   --file "doc.docx" --find "..." --text "..." --no-refresh
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" --find "..." --color "#FFE0E0" --no-refresh
+scripts/lasco-node scripts/superdoc-bridge.js addLink      --file "doc.docx" --find "..." --url "..." --no-refresh
 
 # Single refresh at the end
-node scripts/superdoc-bridge.js refresh --file "doc.docx"
+scripts/lasco-node scripts/superdoc-bridge.js refresh --file "doc.docx"
 ```
 
 This prevents the SuperDoc editor from flashing once per command (e.g., 50 mutations = 50 refreshes → 1 refresh).
@@ -159,7 +159,7 @@ When working with OCR-converted documents in `.lasco/md/`, you can create clicka
 
 **Using box IDs with addLink:**
 ```bash
-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
+scripts/lasco-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
   --find "Certificate of Incorporation" \
   --url "http://localhost:8017?box=Bundle-Sinfield_certificate-AOA__p1__b0" \
   --no-refresh
@@ -178,7 +178,7 @@ For detailed box ID documentation, see [references/box-id-system.md](references/
 
 ```
 1. Read the DOCX:
-   node scripts/superdoc-bridge.js getDocument --file "doc.docx" --format text
+   scripts/lasco-node scripts/superdoc-bridge.js getDocument --file "doc.docx" --format text
 
 2. Identify passages that need source citations
 
@@ -187,13 +187,13 @@ For detailed box ID documentation, see [references/box-id-system.md](references/
    Read the matching JSON file to extract box_id
 
 4. Add links with --no-refresh:
-   node scripts/superdoc-bridge.js addLink --file "doc.docx" \
+   scripts/lasco-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
      --find "passage text" --url "http://localhost:8017?box=<box_id>" --no-refresh
 
 5. Repeat for all citations
 
 6. Single refresh at end:
-   node scripts/superdoc-bridge.js refresh --file "doc.docx"
+   scripts/lasco-node scripts/superdoc-bridge.js refresh --file "doc.docx"
 ```
 
 ### B. Creating a Structured Legal Document
@@ -203,7 +203,7 @@ For detailed box ID documentation, see [references/box-id-system.md](references/
 2. Include inline link elements for citations:
    {"type": "link", "text": "...", "url": "http://localhost:8017?box=<box_id>"}
 3. Pipe JSON to createDocument:
-   echo '<json>' | node scripts/superdoc-bridge.js createDocument --file "output.docx"
+   echo '<json>' | scripts/lasco-node scripts/superdoc-bridge.js createDocument --file "output.docx"
 4. Document auto-appears in SuperDoc extension
 ```
 
@@ -212,14 +212,14 @@ For detailed box ID documentation, see [references/box-id-system.md](references/
 ```
 1. Read document to identify problematic text
 2. Highlight with color:
-   node scripts/superdoc-bridge.js addHighlight --file "doc.docx" \
+   scripts/lasco-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" \
      --find "problematic claim" --color "#FFE0E0" --no-refresh
 3. Add explanation comment:
-   node scripts/superdoc-bridge.js addComment --file "doc.docx" \
+   scripts/lasco-node scripts/superdoc-bridge.js addComment --file "doc.docx" \
      --find "problematic claim" --author "Reviewer" \
      --text "This claim contradicts the evidence at para 12." --no-refresh
 4. Batch refresh:
-   node scripts/superdoc-bridge.js refresh --file "doc.docx"
+   scripts/lasco-node scripts/superdoc-bridge.js refresh --file "doc.docx"
 ```
 
 ### D. Adding Reviewer Comments to a Draft
@@ -227,7 +227,7 @@ For detailed box ID documentation, see [references/box-id-system.md](references/
 ```
 1. Read the document
 2. For each annotation:
-   node scripts/superdoc-bridge.js addComment --file "doc.docx" \
+   scripts/lasco-node scripts/superdoc-bridge.js addComment --file "doc.docx" \
      --find "text to comment on" --author "Reviewer Name" \
      --text "Review comment here" --no-refresh
 3. Single refresh at end
@@ -240,7 +240,7 @@ For detailed box ID documentation, see [references/box-id-system.md](references/
 2. Each document entry is an inline link element:
    {"type": "link", "text": "Document title dated DD.MM.YYYY", "url": "http://localhost:8017?box=<box_id>"}
 3. Generate the DOCX:
-   echo '<json>' | node scripts/superdoc-bridge.js createDocument --file "document_overview.docx"
+   echo '<json>' | scripts/lasco-node scripts/superdoc-bridge.js createDocument --file "document_overview.docx"
 ```
 
 ## JSON Schema Reference for createDocument

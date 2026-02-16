@@ -1,7 +1,7 @@
 ---
 name: agent-browser
 description: Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, testing web apps, or automating any browser task. Triggers include requests to "open a website", "fill out a form", "click a button", "take a screenshot", "scrape data from a page", "test this web app", "login to a site", "automate browser actions", or any task requiring programmatic web interaction.
-allowed-tools: Bash(agent-browser:*), Bash(node */browser-viewer-server.js), Bash(pkill -f browser-viewer-server), Bash(lsof -i :3456), Bash(lsof -i :9223)
+allowed-tools: Bash(agent-browser:*), Bash(scripts/lasco-node scripts/browser-viewer-server.js), Bash(pkill -f browser-viewer-server), Bash(lsof -i :3456), Bash(lsof -i :9223)
 ---
 
 # Browser Automation with agent-browser
@@ -22,7 +22,7 @@ sleep 1
 AGENT_BROWSER_STREAM_PORT=9223 agent-browser open <url>
 
 # 3. Start the viewer proxy so the user can watch at http://localhost:3456
-node scripts/browser-viewer-server.js &
+scripts/lasco-node scripts/browser-viewer-server.js &
 ```
 
 After this, tell the user: **"Live browser view should auto-open in Simple Browser. If not, click the globe icon in the status bar."**

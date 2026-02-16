@@ -134,15 +134,15 @@ The `--find` argument matches against raw XML inside `<w:t>` tags. Word often sp
 
 ```bash
 # Add a source citation as inline hyperlink
-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
+scripts/lasco-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
   --find "Anthropic PBC" --url "http://localhost:8017?box=doc__p3__b0"
 
 # Add a reviewer comment
-node scripts/superdoc-bridge.js addComment --file "doc.docx" \
+scripts/lasco-node scripts/superdoc-bridge.js addComment --file "doc.docx" \
   --find "revenue growth" --author "Reviewer" --text "Verify against Q4 filing"
 
 # Highlight a problematic claim
-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" \
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" \
   --find "material risk" --color "#FFE0E0"
 ```
 
@@ -154,7 +154,7 @@ node scripts/superdoc-bridge.js addHighlight --file "doc.docx" \
     
 -   Auto-refresh touches file timestamp after write to trigger VS Code file watcher
     
--   Pass `--no-refresh` to any mutation command to suppress the 200ms refresh; then call `node scripts/superdoc-bridge.js refresh --file <path>` once after a batch of commands to trigger a single reload
+-   Pass `--no-refresh` to any mutation command to suppress the 200ms refresh; then call `scripts/lasco-node scripts/superdoc-bridge.js refresh --file <path>` once after a batch of commands to trigger a single reload
     
 
 ### Creating Documents (`createDocument`)
@@ -164,7 +164,7 @@ The `createDocument` command builds a new `.docx` file from a JSON content schem
 **Usage:**
 
 ```bash
-echo '<json>' | node scripts/superdoc-bridge.js createDocument --file "output.docx"
+echo '<json>' | scripts/lasco-node scripts/superdoc-bridge.js createDocument --file "output.docx"
 ```
 
 **JSON Schema:**
@@ -226,7 +226,7 @@ The input JSON must have a top-level `content` array. Each element is a block:
 **Example: Generating a chronology DOCX**
 
 ```bash
-cat <<'ENDJSON' | node scripts/superdoc-bridge.js createDocument --file "chronology.docx"
+cat <<'ENDJSON' | scripts/lasco-node scripts/superdoc-bridge.js createDocument --file "chronology.docx"
 {
   "content": [
     { "type": "heading", "level": 1, "text": "Chronology" },

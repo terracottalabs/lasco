@@ -188,16 +188,6 @@ if [[ "${SKIP_BUILD}" == "no" ]]; then
   cp -r "${TMP}/extension" "${EXT_DIR}/anthropic.claude-code"
   rm -rf "${TMP}"
 
-  # --- Encrypt PaddleOCR credentials into extension ---
-  LASCO_ENV="${LASCO_DIR}/../.env"
-  if [[ -f "${LASCO_ENV}" ]]; then
-    CRED_OUT="${EXT_DIR}/lasco/static/.lasco-credentials.enc"
-    node "$(dirname "$0")/encrypt-env.mjs" "${LASCO_ENV}" "${CRED_OUT}"
-    echo "Encrypted PaddleOCR credentials into lasco/static/"
-  else
-    echo "WARNING: .env not found — skipping credential encryption. OCR will require manual configuration."
-  fi
-
   # --- Workspace Template ---
   TMPL="${APP_DIR}/lasco-template"
   rm -rf "${TMPL}"
