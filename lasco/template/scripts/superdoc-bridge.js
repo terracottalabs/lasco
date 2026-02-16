@@ -19,9 +19,12 @@
  */
 
 import { readFileSync, writeFileSync, renameSync, existsSync } from "fs";
-import { resolve } from "path";
+import { resolve, dirname, join } from "path";
 import { execSync } from "child_process";
+import { fileURLToPath } from "url";
 import crypto from "crypto";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 import minimist from "minimist";
 import JSZip from "jszip";
 import {
@@ -417,9 +420,11 @@ async function createDocument(outputPath, noRefresh) {
 async function extractText(filePath) {
   // Primary: use SuperDoc CLI (proper DOCX engine, handles complex formatting)
   try {
+    const cliPath = join(__dirname, "node_modules", "@superdoc-dev", "cli", "dist", "index.js");
     const text = execSync(
-      `npx --yes @superdoc-dev/cli read "${filePath}"`,
-      { encoding: "utf-8", timeout: 30000, stdio: ["pipe", "pipe", "pipe"] }
+      `"${process.execPath}" "${cliPath}" read "${filePath}"`,
+      { encoding: "utf-8", timeout: 30000, stdio: ["pipe", "pipe", "pipe"],
+        env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" } }
     );
     if (text.trim()) return text;
   } catch {

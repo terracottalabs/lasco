@@ -4,8 +4,13 @@
     {
       "label": "Start PDF Viewer Server",
       "type": "process",
-      "command": "node",
+      "command": "${execPath}",
       "args": ["scripts/pdf-server.js"],
+      "options": {
+        "env": {
+          "ELECTRON_RUN_AS_NODE": "1"
+        }
+      },
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {

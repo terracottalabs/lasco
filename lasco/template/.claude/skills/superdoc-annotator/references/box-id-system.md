@@ -91,7 +91,7 @@ python3 .lasco/utils/xref.py link <box_id> --label "Document Name, para X"
 ### In addLink (existing DOCX)
 
 ```bash
-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
+scripts/lasco-node scripts/superdoc-bridge.js addLink --file "doc.docx" \
   --find "Certificate of Incorporation" \
   --url "http://localhost:8017?box=Bundle-Sinfield_certificate-AOA__p1__b0" \
   --no-refresh
@@ -101,7 +101,7 @@ node scripts/superdoc-bridge.js addLink --file "doc.docx" \
 
 Include the URL in markdown-style links within the comment text:
 ```bash
-node scripts/superdoc-bridge.js addComment --file "doc.docx" \
+scripts/lasco-node scripts/superdoc-bridge.js addComment --file "doc.docx" \
   --find "claim text" \
   --author "Reviewer" \
   --text "See [Certificate of Incorporation](http://localhost:8017?box=Bundle-Sinfield_certificate-AOA__p1__b0)" \

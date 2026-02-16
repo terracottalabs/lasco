@@ -35,17 +35,60 @@ For each of the 14 points in `references/PointsForConsideration.md`:
 
 **Important:** Update scratchpad after EACH point - do not batch updates.
 
+### Source Hyperlinking
+
+When recording sources in each section's `**Sources:**` block, use **markdown link syntax** `[description](url)` — but **only** when the link target is useful for end users.
+
+**Link priority (use the first available):**
+
+1. **Box ID URL** (first priority) — links to exact location in the document viewer with highlighting
+   - Find box IDs in `.lasco/md/{safe_name}/boxes/page_X_boxes.json`
+   - Example: `[Codelco Revenue Chart](http://localhost:8017?box=img_in_chart_box_436_272_761_377__p1__b0)`
+2. **Original file** (fallback) — direct path to the source in its original format (PDF, JPG, etc.)
+   - Example: `[Rio Tinto Annual Report chart](../../company_info/rio_annual_report_2024/batch1_imgs/img_in_chart_box_436_272_760_379.jpg)`
+3. **Web URL** — for external sources
+   - Example: `[ACCC enforcement update](https://www.accc.gov.au/example)`
+
+**Do NOT link to `.md` or `.json` files** — these are internal working files not useful for end users. Instead, cite the source in plain text without a link:
+- Example: `Treasury Laws Amendment (Mergers and Acquisitions Reform) Act 2024 (Cth), s.51ABE`
+- Example: `Rio Tinto Annual Report 2024, p.167`
+- Example: `MergerFilers Australia Guide — Thresholds section`
+
+When completing the **Export Summary** table at finalization, populate the `Source URL` column only with box ID URLs, original file paths, or web URLs. Leave blank if only `.md` sources are available.
+
+### Primary Source Selection
+
+After completing each section's research and Sources block, fill in the **Primary Source:** field:
+
+1. Pick the **most authoritative** source for the key finding in that section
+2. Prefer linkable: box ID URL > original file path > web URL
+3. If only `.md`/`.json` sources exist, use a plain-text citation (no URL)
+4. Format: `[Description](url)` for linkable, or plain text for non-linkable
+5. Keep descriptions concise but specific (e.g., "Rio Tinto Annual Report 2024, p.167 - Revenue Note 6")
+
 ## Phase 3: Finalize Output
 
 When all 14 points complete (or user requests finalization):
 
-1. Read completed scratchpad
-2. Apply classification rules from `references/ExcelOutputFormat.md`:
-   - **Thresholds met** → Both parties exceed jurisdictional thresholds
-   - **Thresholds not met** → Either party below thresholds
-   - **To be discussed** → Edge cases, voluntary filing, unclear data
-3. Use xlsx skill to insert row into appropriate sheet
-4. Report: "Added {jurisdiction} to '{sheet}' sheet"
+### Step 1: Populate Export Summary
+For each column (A-N) in the Export Summary table:
+- **Value:** Condensed text for the Excel data cell
+- **Source Description:** From the section's **Primary Source:** field. If it used `[text](url)` syntax,
+  the `text` part goes here. If no Primary Source field exists (older scratchpads), scan the
+  **Sources:** block for the first/best citation.
+- **Source URL:** The URL part from the Primary Source. Leave blank if no linkable source exists.
+
+### Step 2: Classify
+Apply classification rules from `references/ExcelOutputFormat.md`
+
+### Step 3: Generate Python
+Generate `create_excel.py` per `references/ExcelOutputFormat.md`. Critical:
+- **Main sheets** have NO hyperlinks on data cells — text only
+- **Sources sheet** is the 4th sheet with all source citations and clickable hyperlinks
+- Each jurisdiction's `sources` list must be populated from the Export Summary — never empty
+
+### Step 4: Execute and report
+Run `create_excel.py`, then report: "Added {jurisdiction} to '{sheet}' sheet with sources"
 
 ## Available Resources
 

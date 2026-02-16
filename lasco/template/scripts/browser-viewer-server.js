@@ -7,7 +7,7 @@
  * connections don't have an origin header.
  *
  * Usage:
- *   node scripts/browser-viewer-server.js [--port 3456] [--stream-port 9223]
+ *   scripts/lasco-node scripts/browser-viewer-server.js [--port 3456] [--stream-port 9223]
  *
  * Then open http://localhost:3456 in Cursor's Simple Browser
  */

@@ -2,7 +2,7 @@
 name: document-verifier
 description: Verify factual claims in any document — prospectuses, whitepapers, reports, filings, or any text containing verifiable assertions. Use when the user asks to "verify this document", "fact-check this report", "check claims in this whitepaper", "review this report", "source-check this report", "verify this prospectus", "review this prospectus", "check claims in this document", "fact-check this filing", "annotate this prospectus with sources", "underwrite this document", or any request to verify factual claims. Also triggers on mentions of "due diligence", "verify claims", "source check", or "citation check" in the context of a document review.
 tools: Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Bash, Task, TodoWrite
-allowed-tools: Bash(textutil:*), Bash(agent-browser:*), Bash(pkill:*), Bash(lsof:*), Bash(AGENT_BROWSER_STREAM_PORT=9223 agent-browser open:*), Bash(node scripts/browser-viewer-server.js), Bash(node scripts/superdoc-bridge.js:*), Bash(code --list-extensions:*), Bash(curl:*)
+allowed-tools: Bash(textutil:*), Bash(agent-browser:*), Bash(pkill:*), Bash(lsof:*), Bash(AGENT_BROWSER_STREAM_PORT=9223 agent-browser open:*), Bash(scripts/lasco-node scripts/browser-viewer-server.js), Bash(scripts/lasco-node scripts/superdoc-bridge.js:*), Bash(code --list-extensions:*), Bash(curl:*)
 ---
 
 # Document Claim Verifier
@@ -27,7 +27,7 @@ You are performing a systematic fact-check of a document. Your job is to verify 
 3. **Read the full document.**
    - **Command channel mode:** Get the document content via the SuperDoc bridge:
      ```bash
-     node scripts/superdoc-bridge.js getDocument --file "<filename>" --format text
+     scripts/lasco-node scripts/superdoc-bridge.js getDocument --file "<filename>" --format text
      ```
    - **Fallback mode:**
      - `.docx` — Run `textutil -convert txt -stdout "<path>"` to read content. Then convert to markdown for editing: `textutil -convert html -stdout "<path>"` and save as `.md` in the same directory. Edit the `.md` copy.
@@ -123,7 +123,7 @@ Use the SuperDoc bridge script to add comments, highlights, and tracked changes 
 
 **Add a comment on the claim text:**
 ```bash
-node scripts/superdoc-bridge.js addComment \
+scripts/lasco-node scripts/superdoc-bridge.js addComment \
   --file "<filename>" \
   --find "<exact claim text>" \
   --author "Document Verifier" \
@@ -132,7 +132,7 @@ node scripts/superdoc-bridge.js addComment \
 
 **Add a source hyperlink inline after the claim text:**
 ```bash
-node scripts/superdoc-bridge.js addLink \
+scripts/lasco-node scripts/superdoc-bridge.js addLink \
   --file "<filename>" \
   --find "<claim text or key phrase>" \
   --url "<source_url>"
@@ -143,7 +143,7 @@ This inserts the URL as visible clickable text in parentheses right after the cl
 
 **For INACCURATE claims, also apply a red highlight:**
 ```bash
-node scripts/superdoc-bridge.js addHighlight \
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight \
   --file "<filename>" \
   --find "<exact claim text>" \
   --color "#FFE0E0"
@@ -151,7 +151,7 @@ node scripts/superdoc-bridge.js addHighlight \
 
 **For MISLEADING claims, also apply a yellow highlight:**
 ```bash
-node scripts/superdoc-bridge.js addHighlight \
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight \
   --file "<filename>" \
   --find "<exact claim text>" \
   --color "#FFF3CD"
@@ -159,7 +159,7 @@ node scripts/superdoc-bridge.js addHighlight \
 
 **For claims requiring correction, suggest a tracked change (redline):**
 ```bash
-node scripts/superdoc-bridge.js suggestEdit \
+scripts/lasco-node scripts/superdoc-bridge.js suggestEdit \
   --file "<filename>" \
   --find "<incorrect text>" \
   --replace "<corrected text>" \
@@ -237,12 +237,12 @@ Every bridge mutation command (`addComment`, `addHighlight`, `addLink`, `suggest
 
 ```bash
 # All mutation commands for one claim — no refresh
-node scripts/superdoc-bridge.js addComment  --file "doc.docx" --find "..." --text "..." --no-refresh
-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" --find "..." --color "#FFE0E0" --no-refresh
-node scripts/superdoc-bridge.js addLink     --file "doc.docx" --find "..." --url "..." --no-refresh
+scripts/lasco-node scripts/superdoc-bridge.js addComment  --file "doc.docx" --find "..." --text "..." --no-refresh
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight --file "doc.docx" --find "..." --color "#FFE0E0" --no-refresh
+scripts/lasco-node scripts/superdoc-bridge.js addLink     --file "doc.docx" --find "..." --url "..." --no-refresh
 
 # After all annotations for this subagent batch are done — single refresh
-node scripts/superdoc-bridge.js refresh --file "doc.docx"
+scripts/lasco-node scripts/superdoc-bridge.js refresh --file "doc.docx"
 ```
 
 This avoids flashing the SuperDoc editor once per command (3 commands × 50 claims = 150 refreshes → 1 refresh per batch).
@@ -255,7 +255,7 @@ After all annotations are inserted, add a summary at the end of the document.
 
 Insert the summary table at the end of the document via the SuperDoc bridge:
 ```bash
-node scripts/superdoc-bridge.js insertText \
+scripts/lasco-node scripts/superdoc-bridge.js insertText \
   --file "<filename>" \
   --at end \
   --text "

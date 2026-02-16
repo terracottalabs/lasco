@@ -108,7 +108,7 @@ Each verdict becomes a comment on the exact claim text:
 
 Example command:
 ```bash
-node scripts/superdoc-bridge.js addComment \
+scripts/lasco-node scripts/superdoc-bridge.js addComment \
   --file "Prospectus.docx" \
   --find "the renewable energy market will reach $1.5 trillion by 2030" \
   --author "Document Verifier" \
@@ -127,7 +127,7 @@ Highlight colors for problem claims:
 
 Apply highlights via:
 ```bash
-node scripts/superdoc-bridge.js addHighlight \
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight \
   --file "Prospectus.docx" \
   --find "the renewable energy market will reach $1.5 trillion by 2030" \
   --color "#FFE0E0"
@@ -141,7 +141,7 @@ When the document is open in SuperDoc, source URLs should be inserted as **visib
 
 **Command:**
 ```bash
-node scripts/superdoc-bridge.js addLink \
+scripts/lasco-node scripts/superdoc-bridge.js addLink \
   --file "Prospectus.docx" \
   --find "the renewable energy market will reach $1.5 trillion by 2030" \
   --url "https://irena.org/Publications"
@@ -164,20 +164,20 @@ node scripts/superdoc-bridge.js addLink \
 **Example — full annotation of an inaccurate claim:**
 ```bash
 # 1. Comment with verdict
-node scripts/superdoc-bridge.js addComment \
+scripts/lasco-node scripts/superdoc-bridge.js addComment \
   --file "Prospectus.docx" \
   --find "revenue of $50 million in 2023" \
   --author "Document Verifier" \
   --text "INACCURATE: SEC 10-K filing shows $35M revenue for FY2023."
 
 # 2. Inline source hyperlink
-node scripts/superdoc-bridge.js addLink \
+scripts/lasco-node scripts/superdoc-bridge.js addLink \
   --file "Prospectus.docx" \
   --find "revenue of $50 million in 2023" \
   --url "https://sec.gov/cgi-bin/browse-edgar?action=getcompany..."
 
 # 3. Red highlight for inaccurate claim
-node scripts/superdoc-bridge.js addHighlight \
+scripts/lasco-node scripts/superdoc-bridge.js addHighlight \
   --file "Prospectus.docx" \
   --find "revenue of $50 million in 2023" \
   --color "#FFE0E0"
@@ -194,7 +194,7 @@ For claims where the document text itself needs correction, use tracked changes 
 
 **Command:**
 ```bash
-node scripts/superdoc-bridge.js suggestEdit \
+scripts/lasco-node scripts/superdoc-bridge.js suggestEdit \
   --file "Prospectus.docx" \
   --find "revenue of $50 million in 2023" \
   --replace "revenue of $35 million in 2023" \
