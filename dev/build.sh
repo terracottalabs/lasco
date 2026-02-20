@@ -163,6 +163,8 @@ if [[ "${SKIP_BUILD}" == "no" ]]; then
     VSIX_FILE="$(basename "${vsix_path}")"
     # Skip Claude Code (handled separately below as platform-specific)
     [[ "${VSIX_FILE}" == anthropic.claude-code-* ]] && continue
+    # Skip lasco-auth (not bundled)
+    [[ "${VSIX_FILE}" == lasco-auth-* ]] && continue
     # Derive extension name: strip trailing -MAJOR.MINOR.PATCH.vsix
     EXT_NAME="$(echo "${VSIX_FILE}" | sed -E 's/-[0-9]+\.[0-9]+\.[0-9]+\.vsix$//')"
     TMP=$(mktemp -d)
