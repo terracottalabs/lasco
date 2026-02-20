@@ -650,7 +650,7 @@
     "timeline.enabled": false,
     "scm.enabled": false,
     "debug.enabled": false,
-    "extensions.sidebar.enabled": false
+    "extensions.sidebar.enabled": true
   },
   "builtInExtensions": [],
   "defaultChatAgent": {},
