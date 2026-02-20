@@ -45,7 +45,7 @@ setpath "product" "keyboardShortcutsUrlLinux" "https://github.com/rocky-terracot
 setpath "product" "keyboardShortcutsUrlMac" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
 setpath "product" "keyboardShortcutsUrlWin" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
 setpath "product" "licenseUrl" "https://github.com/rocky-terracotta/lasco-demo/blob/main/LICENSE"
-setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org", "https://github.com"]'
+setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org", "https://github.com", "https://getlasco.com"]'
 setpath "product" "releaseNotesUrl" "https://github.com/rocky-terracotta/lasco-demo/releases"
 setpath "product" "reportIssueUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
 setpath "product" "requestFeatureUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
