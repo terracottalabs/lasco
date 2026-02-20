@@ -1,0 +1,7 @@
+diff --git a/build/lib/electron.ts b/build/lib/electron.ts
+--- a/build/lib/electron.ts
++++ b/build/lib/electron.ts
+@@ -111,2 +111,3 @@ export const config = {
+ 	darwinBundleIdentifier: product.darwinBundleIdentifier,
++	darwinExecutable: product.nameShort,
+ 	darwinApplicationCategoryType: 'public.app-category.developer-tools',
