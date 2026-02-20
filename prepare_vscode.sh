@@ -91,8 +91,8 @@ if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
   setpath "product" "win32ContextMenu.x64.clsid" "90AAD229-85FD-43A3-B82D-8598A88829CF"
   setpath "product" "win32ContextMenu.arm64.clsid" "7544C31C-BDBF-4DDF-B15E-F73A46D6723D"
 else
-  setpath "product" "nameShort" "LASCO"
-   setpath "product" "nameLong" "LASCO"
+  setpath "product" "nameShort" "Lasco"
+   setpath "product" "nameLong" "Lasco"
    setpath "product" "applicationName" "lasco"
    setpath "product" "dataFolderName" ".lasco"
    setpath "product" "linuxIconName" "lasco"
@@ -101,12 +101,12 @@ else
    setpath "product" "serverApplicationName" "lasco-server"
    setpath "product" "serverDataFolderName" ".lasco-server"
    setpath "product" "darwinBundleIdentifier" "com.lasco.app"
-   setpath "product" "win32AppUserModelId" "LASCO.LASCO"
-   setpath "product" "win32DirName" "LASCO"
+   setpath "product" "win32AppUserModelId" "Lasco.Lasco"
+   setpath "product" "win32DirName" "Lasco"
    setpath "product" "win32MutexName" "lasco"
-   setpath "product" "win32NameVersion" "LASCO"
-   setpath "product" "win32RegValueName" "LASCO"
-   setpath "product" "win32ShellNameShort" "LASCO"
+   setpath "product" "win32NameVersion" "Lasco"
+   setpath "product" "win32RegValueName" "Lasco"
+   setpath "product" "win32ShellNameShort" "Lasco"
    setpath "product" "win32AppId" "{{763CBF88-25C6-4B10-952F-326AE657F16B}"
    setpath "product" "win32x64AppId" "{{88DA3577-054F-4CA1-8122-7D820494CFFB}"
    setpath "product" "win32arm64AppId" "{{67DEE444-3D04-4258-B92A-BC1F0FF2CAE4}"
@@ -236,7 +236,7 @@ cp package.json{,.bak}
 
 setpath "package" "version" "${RELEASE_VERSION%-insider}"
 
-replace 's|Microsoft Corporation|LASCO|' package.json
+replace 's|Microsoft Corporation|Lasco|' package.json
 
 cp resources/server/manifest.json{,.bak}
 
@@ -244,8 +244,8 @@ if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
   setpath "resources/server/manifest" "name" "VSCodium - Insiders"
   setpath "resources/server/manifest" "short_name" "VSCodium - Insiders"
 else
-  setpath "resources/server/manifest" "name" "LASCO"
-  setpath "resources/server/manifest" "short_name" "LASCO"
+  setpath "resources/server/manifest" "name" "Lasco"
+  setpath "resources/server/manifest" "short_name" "Lasco"
 fi
 
 # announcements
@@ -253,9 +253,9 @@ replace "s|\\[\\/\\* BUILTIN_ANNOUNCEMENTS \\*\\/\\]|$( tr -d '\n' < ../announce
 
 ../undo_telemetry.sh
 
-replace 's|Microsoft Corporation|LASCO|' build/lib/electron.ts
-replace 's|([0-9]) Microsoft|\1 LASCO|' build/lib/electron.ts
-replace "s|VS Code HelpBook|LASCO HelpBook|g" build/lib/electron.ts
+replace 's|Microsoft Corporation|Lasco|' build/lib/electron.ts
+replace 's|([0-9]) Microsoft|\1 Lasco|' build/lib/electron.ts
+replace "s|VS Code HelpBook|Lasco HelpBook|g" build/lib/electron.ts
 
 if [[ "${OS_NAME}" == "linux" ]]; then
   # microsoft adds their apt repo to sources
@@ -299,7 +299,7 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
 
   # code.iss
   sed -i 's|https://code.visualstudio.com|https://www.terracotta.dev|' "${ISS_PATH}"
-  sed -i 's|Microsoft Corporation|LASCO|' "${ISS_PATH}"
+  sed -i 's|Microsoft Corporation|Lasco|' "${ISS_PATH}"
 fi
 
 cd ..
