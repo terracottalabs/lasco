@@ -655,5 +655,8 @@
   "builtInExtensions": [],
   "defaultChatAgent": {},
   "trustedExtensionAuthAccess": {},
+  "trustedExtensionProtocolHandlers": [
+    "Terracotta.lasco"
+  ],
   "webviewContentExternalBaseUrlTemplate": ""
 }
