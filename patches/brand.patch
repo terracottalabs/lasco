@@ -1108,7 +1108,7 @@ diff --git a/src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/too
 index f92fe12..a5a7e02 100644
 --- a/src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/task/runTaskTool.ts
 +++ b/src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/task/runTaskTool.ts
-@@ -152,3 +152,3 @@ export const RunTaskToolData: IToolData = {
+@@ -153,3 +153,3 @@ export const RunTaskToolData: IToolData = {
  	displayName: localize('runInTerminalTool.displayName', 'Run Task'),
 -	modelDescription: 'Runs a VS Code task.\n\n- If you see that an appropriate task exists for building or running code, prefer to use this tool to run the task instead of using the run_in_terminal tool.\n- Make sure that any appropriate build or watch task is running before trying to run tests or execute code.\n- If the user asks to run a task, use this tool to do so.',
 +	modelDescription: 'Runs a Lasco task.\n\n- If you see that an appropriate task exists for building or running code, prefer to use this tool to run the task instead of using the run_in_terminal tool.\n- Make sure that any appropriate build or watch task is running before trying to run tests or execute code.\n- If the user asks to run a task, use this tool to do so.',

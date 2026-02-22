@@ -659,14 +659,7 @@
     "timeline.enabled": false,
     "scm.enabled": false,
     "debug.enabled": false,
-    "extensions.sidebar.enabled": true,
-    "workbench.externalUriOpeners": {
-      "https://www.hklii.hk/**": "simpleBrowser.open",
-      "https://hklii.hk/**": "simpleBrowser.open",
-      "https://legalref.judiciary.hk/**": "simpleBrowser.open",
-      "https://www.judiciary.hk/**": "simpleBrowser.open",
-      "https://caselaw.nationalarchives.gov.uk/**": "simpleBrowser.open"
-    }
+    "extensions.sidebar.enabled": true
   },
   "builtInExtensions": [],
   "defaultChatAgent": {},

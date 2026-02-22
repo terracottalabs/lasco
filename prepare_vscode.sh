@@ -302,4 +302,100 @@ elif [[ "${OS_NAME}" == "windows" ]]; then
   sed -i 's|Microsoft Corporation|Lasco|' "${ISS_PATH}"
 fi
 
+# {{{ PostHog analytics & session replay
+WORKBENCH_HTML="src/vs/code/electron-browser/workbench/workbench.html"
+
+if [[ -f "../posthog-init.js" && -f "${WORKBENCH_HTML}" ]]; then
+  cp ../posthog-init.js "src/vs/code/electron-browser/workbench/posthog-init.js"
+
+  # Inject <script> tag before </head>, update CSP for PostHog CDN + Trusted Types
+  node -e "
+    const fs = require('fs');
+    let html = fs.readFileSync('${WORKBENCH_HTML}', 'utf8');
+    html = html.replace('</head>', '\t<script src=\"posthog-init.js\"></script>\n\t</head>');
+    // Allow PostHog CDN in script-src (multi-line CSP — add after 'self')
+    html = html.replace(
+      /(script-src\s[\s\S]*?)'self'/,
+      \"\\\$1'self' https://eu-assets.i.posthog.com\"
+    );
+    // Add 'default' to trusted-types whitelist (not require-trusted-types-for)
+    html = html.replace(
+      /((?<!require-)trusted-types[\s\S]*?)(;\n)/,
+      '\$1 default\$2'
+    );
+    fs.writeFileSync('${WORKBENCH_HTML}', html);
+  "
+
+  # Ensure posthog-init.js is included in vscodeResources so it survives the gulp bundleTask
+  node -e "
+    const fs = require('fs');
+    const gulpfile = 'build/gulpfile.vscode.ts';
+    let src = fs.readFileSync(gulpfile, 'utf8');
+    const marker = 'out-build/vs/code/electron-browser/workbench/workbench.html';
+    if (src.includes(marker) && !src.includes('posthog-init.js')) {
+      src = src.replace(
+        marker,
+        marker + \"',\\n\\t'out-build/vs/code/electron-browser/workbench/posthog-init.js\"
+      );
+      fs.writeFileSync(gulpfile, src);
+      console.log('Added posthog-init.js to vscodeResources in gulpfile.vscode.ts');
+    } else {
+      console.log('posthog-init.js already in vscodeResources or marker not found');
+    }
+  "
+
+  # Inject PostHog child snippet into webview iframes for cross-origin session recording
+  WEBVIEW_HTML="src/vs/workbench/contrib/webview/browser/pre/index.html"
+  if [[ -f "${WEBVIEW_HTML}" ]]; then
+    node -e "
+      const fs = require('fs');
+      let html = fs.readFileSync('${WEBVIEW_HTML}', 'utf8');
+
+      // 1. Update outer CSP: allow PostHog CDN in script-src and add connect-src
+      html = html.replace(
+        /(script-src[^;]*)/,
+        '\$1 https://eu-assets.i.posthog.com'
+      );
+      html = html.replace(
+        /(style-src 'unsafe-inline';)/,
+        \"\\\$1 connect-src https://eu.i.posthog.com;\"
+      );
+
+      // 2. Inject PostHog child snippet into toContentHtml() using DOM APIs
+      //    The function uses DOMParser, so we create a script element on newDocument.head
+      const phSnippetJs = '!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(\\\".\\\");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement(\\\"script\\\")).type=\\\"text/javascript\\\",p.crossOrigin=\\\"anonymous\\\",p.async=!0,p.src=s.api_host.replace(\\\".i.posthog.com\\\",\\\"-assets.i.posthog.com\\\")+\\\"/static/array.js\\\",(r=t.getElementsByTagName(\\\"script\\\")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a=\\\"posthog\\\",u.people=u.people||[],u.toString=function(t){var e=\\\"posthog\\\";return\\\"posthog\\\"!==a&&(e+=\\\".\\\"+a),t||(e+=\\\" (stub)\\\"),e},u.people.toString=function(){return u.toString(1)+\\\".people (stub)\\\"},o=\\\"init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep identify setPersonProperties\\\".split(\\\" \\\"),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);posthog.init(\\\"phc_xRu36ASMkpDVQWeXZThwzlfY8cfottFshNpaLH833hG\\\",{api_host:\\\"https://eu.i.posthog.com\\\",session_recording:{recordCrossOriginIframes:true},autocapture:false,capture_pageleave:false});';
+
+      const injection = [
+        '',
+        '\t\t\t// Inject PostHog session recording child snippet',
+        '\t\t\t{',
+        '\t\t\t\tconst phScript = newDocument.createElement(\"script\");',
+        '\t\t\t\tphScript.textContent = \'' + phSnippetJs + '\';',
+        '\t\t\t\tnewDocument.head.prepend(phScript);',
+        '\t\t\t}',
+        ''
+      ].join('\\n');
+
+      const marker = '// Inject default styles';
+      if (html.includes(marker)) {
+        html = html.replace(marker, injection + '\\n\\t\\t\\t' + marker);
+        console.log('PostHog child snippet injected into toContentHtml()');
+      } else {
+        console.error('Could not find injection marker in toContentHtml()');
+        process.exit(1);
+      }
+
+      fs.writeFileSync('${WEBVIEW_HTML}', html);
+      console.log('Webview index.html patched successfully');
+    "
+  else
+    echo "Warning: ${WEBVIEW_HTML} not found, skipping webview PostHog injection"
+  fi
+
+  echo "PostHog analytics injected into workbench"
+else
+  echo "Warning: posthog-init.js or ${WORKBENCH_HTML} not found, skipping PostHog injection"
+fi
+# }}}
+
 cd ..
