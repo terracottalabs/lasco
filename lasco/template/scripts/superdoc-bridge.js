@@ -461,7 +461,7 @@ async function extractText(filePath) {
           { encoding: "utf-8", timeout: 30000 }
         );
       } else {
-        // macOS: use textutil
+        // macOS (or Linux): use textutil
         result = execSync(`textutil -convert txt -stdout "${filePath}"`, {
           encoding: "utf-8",
         });

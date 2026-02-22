@@ -5,6 +5,29 @@ set -ex
 
 . version.sh
 
+remove_unwanted_extensions() {
+  local ext_base_dir="$1"
+  echo "Removing unwanted built-in extensions from ${ext_base_dir}..."
+  for ext in \
+    git git-base github github-authentication debug-auto-launch debug-server-ready \
+    bat clojure coffeescript cpp csharp dart diff docker dotenv fsharp go groovy \
+    handlebars hlsl ini java javascript julia latex less log lua make objective-c \
+    perl php powershell pug python r razor restructuredtext ruby rust scss \
+    shaderlab shellscript sql swift typescript-basics vb \
+    emmet extension-editing grunt gulp jake npm ipynb notebook-renderers \
+    merge-conflict tunnel-forwarding terminal-suggest prompt-basics \
+    mermaid-chat-features microsoft-authentication \
+    theme-abyss theme-kimbie-dark theme-monokai theme-monokai-dimmed \
+    theme-red theme-seti theme-solarized-dark theme-tomorrow-night-blue \
+    vscode-api-tests vscode-colorize-perf-tests vscode-colorize-tests \
+    vscode-test-resolver; do
+    if [[ -d "${ext_base_dir}/${ext}" ]]; then
+      rm -rf "${ext_base_dir}/${ext}"
+      echo "  Removed: ${ext}"
+    fi
+  done
+}
+
 if [[ "${SHOULD_BUILD}" == "yes" ]]; then
   echo "MS_COMMIT=\"${MS_COMMIT}\""
 
@@ -32,6 +55,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
     npm run gulp "vscode-darwin-${VSCODE_ARCH}-min-ci"
 
+    remove_unwanted_extensions "../VSCode-darwin-${VSCODE_ARCH}/Lasco.app/Contents/Resources/app/extensions"
+
     find "../VSCode-darwin-${VSCODE_ARCH}" -print0 | xargs -0 touch -c
 
     # CLI build skipped — LASCO doesn't need tunnel/remote functionality
@@ -48,6 +73,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
       node build/lib/policies/policyGenerator.ts build/lib/policies/policyData.jsonc win32
 
       npm run gulp "vscode-win32-${VSCODE_ARCH}-min-ci"
+
+      remove_unwanted_extensions "../VSCode-win32-${VSCODE_ARCH}/resources/app/extensions"
 
       if [[ "${VSCODE_ARCH}" != "x64" ]]; then
         SHOULD_BUILD_REH="no"
@@ -69,6 +96,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
       node build/lib/policies/policyGenerator.ts build/lib/policies/policyData.jsonc linux
 
       npm run gulp "vscode-linux-${VSCODE_ARCH}-min-ci"
+
+      remove_unwanted_extensions "../VSCode-linux-${VSCODE_ARCH}/resources/app/extensions"
 
       find "../VSCode-linux-${VSCODE_ARCH}" -print0 | xargs -0 touch -c
 

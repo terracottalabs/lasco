@@ -1,6 +1,7 @@
 {
   "workbench.editorAssociations": {
-    "*.pdf": "pdf.preview"
+    "*.pdf": "pdf.preview",
+    "*.docx": "superdoc.docxEditor"
   },
   "files.exclude": {
     "**/.git": true,

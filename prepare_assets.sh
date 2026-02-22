@@ -71,10 +71,15 @@ if [[ "${OS_NAME}" == "osx" ]]; then
     cd ..
   fi
 
-  if [[ -n "${CERTIFICATE_OSX_P12_DATA}" && "${SHOULD_BUILD_DMG}" != "no" ]]; then
+  if [[ "${SHOULD_BUILD_DMG}" != "no" ]]; then
     echo "Building and moving DMG"
     pushd "VSCode-darwin-${VSCODE_ARCH}"
-    npx create-dmg ./*.app .
+    if [[ -n "${CERTIFICATE_OSX_P12_DATA}" ]]; then
+      npx create-dmg ./*.app .
+    else
+      echo "No signing certificate — creating unsigned DMG with hdiutil"
+      hdiutil create -volname "${APP_NAME}" -srcfolder ./*.app -ov -format UDZO "./${APP_NAME}.${VSCODE_ARCH}.${RELEASE_VERSION}.dmg"
+    fi
     mv ./*.dmg "../assets/${APP_NAME}.${VSCODE_ARCH}.${RELEASE_VERSION}.dmg"
     popd
   fi

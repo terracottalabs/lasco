@@ -11,7 +11,7 @@
 
 import { createServer } from 'http';
 import { createReadStream, existsSync } from 'fs';
-import { resolve, extname } from 'path';
+import { resolve, relative, isAbsolute, extname } from 'path';
 import { URL } from 'url';
 
 const PORT = 8017;
@@ -43,7 +43,8 @@ const server = createServer((req, res) => {
 
   // Prevent path traversal
   const filePath = resolve(process.cwd(), '.' + pathname);
-  if (!filePath.startsWith(process.cwd())) {
+  const rel = relative(process.cwd(), filePath);
+  if (rel.startsWith('..') || isAbsolute(rel)) {
     res.writeHead(403);
     res.end('Forbidden');
     return;

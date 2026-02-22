@@ -39,7 +39,8 @@ posthog.init('phc_xRu36ASMkpDVQWeXZThwzlfY8cfottFshNpaLH833hG', {
   var home = env.HOME || env.USERPROFILE;
   if (!home) return; // can't resolve path
 
-  var identityPath = home + '/.lasco/User/globalStorage/terracotta.lasco/posthog-identity.json';
+  var identityPath = home.replace(/\\/g, '/') + '/.lasco/User/globalStorage/terracotta.lasco/posthog-identity.json';
+  if (identityPath.charAt(0) !== '/') identityPath = '/' + identityPath;
   var fileUrl = 'vscode-file://vscode-app' + identityPath;
   var identified = false;
 

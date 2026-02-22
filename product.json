@@ -647,7 +647,8 @@
       "**/.mcp.json": true
     },
     "workbench.editorAssociations": {
-      "*.pdf": "pdf.preview"
+      "*.pdf": "pdf.preview",
+      "*.docx": "superdoc.docxEditor"
     },
     "lasco.logLevel": "info",
     "workbench.editor.splitOnDragAndDrop": false,
@@ -661,11 +662,8 @@
     "debug.enabled": false,
     "extensions.sidebar.enabled": true,
     "workbench.externalUriOpeners": {
-      "https://www.hklii.hk/**": "simpleBrowser.open",
-      "https://hklii.hk/**": "simpleBrowser.open",
-      "https://legalref.judiciary.hk/**": "simpleBrowser.open",
-      "https://www.judiciary.hk/**": "simpleBrowser.open",
-      "https://caselaw.nationalarchives.gov.uk/**": "simpleBrowser.open"
+      "http://*": "simpleBrowser.open",
+      "https://*": "simpleBrowser.open"
     }
   },
   "defaultHiddenStatusBarEntries": [

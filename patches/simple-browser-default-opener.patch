@@ -8,7 +8,8 @@ index 79802e7..b0299e9 100644
    "contributes": {
 +    "configurationDefaults": {
 +      "workbench.externalUriOpeners": {
-+        "http://*": "simpleBrowser.open"
++        "http://*": "simpleBrowser.open",
++        "https://*": "simpleBrowser.open"
 +      }
 +    },
      "commands": [
