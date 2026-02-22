@@ -24,7 +24,7 @@ posthog.init('phc_xRu36ASMkpDVQWeXZThwzlfY8cfottFshNpaLH833hG', {
   api_host: 'https://eu.i.posthog.com',
   person_profiles: 'identified_only',
   disable_session_recording: false,
-  session_recording: { maskAllInputs: false, recordCrossOriginIframes: true },
+  session_recording: { maskAllInputs: false, recordCrossOriginIframes: false },
   autocapture: true,
   capture_performance: true,
   capture_pageleave: false,
