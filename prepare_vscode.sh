@@ -225,7 +225,19 @@ mv .npmrc.bak .npmrc
 
 # {{{ remove unwanted built-in extensions
 echo "Removing unwanted built-in extensions..."
-for ext in git git-base github github-authentication debug-auto-launch debug-server-ready; do
+for ext in \
+  git git-base github github-authentication debug-auto-launch debug-server-ready \
+  bat clojure coffeescript cpp csharp dart diff docker dotenv fsharp go groovy \
+  handlebars hlsl ini java javascript julia latex less log lua make objective-c \
+  perl php powershell pug python r razor restructuredtext ruby rust scss \
+  shaderlab shellscript sql swift typescript-basics vb \
+  emmet extension-editing grunt gulp jake npm ipynb notebook-renderers \
+  merge-conflict tunnel-forwarding terminal-suggest prompt-basics \
+  mermaid-chat-features microsoft-authentication \
+  theme-abyss theme-kimbie-dark theme-monokai theme-monokai-dimmed \
+  theme-red theme-seti theme-solarized-dark theme-tomorrow-night-blue \
+  vscode-api-tests vscode-colorize-perf-tests vscode-colorize-tests \
+  vscode-test-resolver; do
   if [[ -d "extensions/${ext}" ]]; then
     rm -rf "extensions/${ext}"
     echo "  Removed: ${ext}"
