@@ -34,21 +34,23 @@ setpath_json() {
   set -x
 }
 
-setpath "product" "checksumFailMoreInfoUrl" "https://go.microsoft.com/fwlink/?LinkId=828886"
-setpath "product" "documentationUrl" "https://go.microsoft.com/fwlink/?LinkID=533484#vscode"
-setpath_json "product" "extensionsGallery" '{"serviceUrl": "https://open-vsx.org/vscode/gallery", "itemUrl": "https://open-vsx.org/vscode/item", "latestUrlTemplate": "https://open-vsx.org/vscode/gallery/{publisher}/{name}/latest", "controlUrl": "https://raw.githubusercontent.com/EclipseFdn/publish-extensions/refs/heads/master/extension-control/extensions.json"}'
+setpath "product" "licenseUrl" "https://github.com/rocky-terracotta/lasco-demo/blob/main/LICENSE"
+setpath "product" "reportIssueUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
+setpath "product" "checksumFailMoreInfoUrl" "https://github.com/rocky-terracotta/lasco-demo"
+setpath "product" "documentationUrl" "https://github.com/rocky-terracotta/lasco-demo#documentation"
+setpath_json "product" "extensionsGallery" '{}'
 
-setpath "product" "introductoryVideosUrl" "https://go.microsoft.com/fwlink/?linkid=832146"
-setpath "product" "keyboardShortcutsUrlLinux" "https://go.microsoft.com/fwlink/?linkid=832144"
-setpath "product" "keyboardShortcutsUrlMac" "https://go.microsoft.com/fwlink/?linkid=832143"
-setpath "product" "keyboardShortcutsUrlWin" "https://go.microsoft.com/fwlink/?linkid=832145"
-setpath "product" "licenseUrl" "https://github.com/VSCodium/vscodium/blob/master/LICENSE"
-setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org"]'
-setpath "product" "releaseNotesUrl" "https://go.microsoft.com/fwlink/?LinkID=533483#vscode"
-setpath "product" "reportIssueUrl" "https://github.com/VSCodium/vscodium/issues/new"
-setpath "product" "requestFeatureUrl" "https://go.microsoft.com/fwlink/?LinkID=533482"
-setpath "product" "tipsAndTricksUrl" "https://go.microsoft.com/fwlink/?linkid=852118"
-setpath "product" "twitterUrl" "https://go.microsoft.com/fwlink/?LinkID=533687"
+setpath "product" "introductoryVideosUrl" "https://github.com/rocky-terracotta/lasco-demo#getting-started"
+setpath "product" "keyboardShortcutsUrlLinux" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
+setpath "product" "keyboardShortcutsUrlMac" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
+setpath "product" "keyboardShortcutsUrlWin" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
+setpath "product" "licenseUrl" "https://github.com/rocky-terracotta/lasco-demo/blob/main/LICENSE"
+setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org", "https://github.com", "https://getlasco.com"]'
+setpath "product" "releaseNotesUrl" "https://github.com/rocky-terracotta/lasco-demo/releases"
+setpath "product" "reportIssueUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
+setpath "product" "requestFeatureUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
+setpath "product" "tipsAndTricksUrl" "https://github.com/rocky-terracotta/lasco-demo#tips"
+setpath "product" "twitterUrl" "https://github.com/rocky-terracotta/lasco-demo"
 
 if [[ "${DISABLE_UPDATE}" != "yes" ]]; then
   setpath "product" "updateUrl" "https://raw.githubusercontent.com/VSCodium/versions/refs/heads/master"
@@ -58,10 +60,6 @@ if [[ "${DISABLE_UPDATE}" != "yes" ]]; then
   else
     setpath "product" "downloadUrl" "https://github.com/VSCodium/vscodium/releases"
   fi
-
-  # if [[ "${OS_NAME}" == "windows" ]]; then
-  #   setpath_json "product" "win32VersionedUpdate" "true"
-  # fi
 fi
 
 if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
@@ -93,32 +91,33 @@ if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
   setpath "product" "win32ContextMenu.x64.clsid" "90AAD229-85FD-43A3-B82D-8598A88829CF"
   setpath "product" "win32ContextMenu.arm64.clsid" "7544C31C-BDBF-4DDF-B15E-F73A46D6723D"
 else
-  setpath "product" "nameShort" "VSCodium"
-  setpath "product" "nameLong" "VSCodium"
-  setpath "product" "applicationName" "codium"
-  setpath "product" "linuxIconName" "vscodium"
-  setpath "product" "quality" "stable"
-  setpath "product" "urlProtocol" "vscodium"
-  setpath "product" "serverApplicationName" "codium-server"
-  setpath "product" "serverDataFolderName" ".vscodium-server"
-  setpath "product" "darwinBundleIdentifier" "com.vscodium"
-  setpath "product" "win32AppUserModelId" "VSCodium.VSCodium"
-  setpath "product" "win32DirName" "VSCodium"
-  setpath "product" "win32MutexName" "vscodium"
-  setpath "product" "win32NameVersion" "VSCodium"
-  setpath "product" "win32RegValueName" "VSCodium"
-  setpath "product" "win32ShellNameShort" "VSCodium"
-  setpath "product" "win32AppId" "{{763CBF88-25C6-4B10-952F-326AE657F16B}"
-  setpath "product" "win32x64AppId" "{{88DA3577-054F-4CA1-8122-7D820494CFFB}"
-  setpath "product" "win32arm64AppId" "{{67DEE444-3D04-4258-B92A-BC1F0FF2CAE4}"
-  setpath "product" "win32UserAppId" "{{0FD05EB4-651E-4E78-A062-515204B47A3A}"
-  setpath "product" "win32x64UserAppId" "{{2E1F05D1-C245-4562-81EE-28188DB6FD17}"
-  setpath "product" "win32arm64UserAppId" "{{57FD70A5-1B8D-4875-9F40-C5553F094828}"
-  setpath "product" "tunnelApplicationName" "codium-tunnel"
-  setpath "product" "win32TunnelServiceMutex" "vscodium-tunnelservice"
-  setpath "product" "win32TunnelMutex" "vscodium-tunnel"
-  setpath "product" "win32ContextMenu.x64.clsid" "D910D5E6-B277-4F4A-BDC5-759A34EEE25D"
-  setpath "product" "win32ContextMenu.arm64.clsid" "4852FC55-4A84-4EA1-9C86-D53BE3DF83C0"
+  setpath "product" "nameShort" "Lasco"
+   setpath "product" "nameLong" "Lasco"
+   setpath "product" "applicationName" "lasco"
+   setpath "product" "dataFolderName" ".lasco"
+   setpath "product" "linuxIconName" "lasco"
+   setpath "product" "quality" "stable"
+   setpath "product" "urlProtocol" "lasco"
+   setpath "product" "serverApplicationName" "lasco-server"
+   setpath "product" "serverDataFolderName" ".lasco-server"
+   setpath "product" "darwinBundleIdentifier" "com.lasco.app"
+   setpath "product" "win32AppUserModelId" "Lasco.Lasco"
+   setpath "product" "win32DirName" "Lasco"
+   setpath "product" "win32MutexName" "lasco"
+   setpath "product" "win32NameVersion" "Lasco"
+   setpath "product" "win32RegValueName" "Lasco"
+   setpath "product" "win32ShellNameShort" "Lasco"
+   setpath "product" "win32AppId" "{{763CBF88-25C6-4B10-952F-326AE657F16B}"
+   setpath "product" "win32x64AppId" "{{88DA3577-054F-4CA1-8122-7D820494CFFB}"
+   setpath "product" "win32arm64AppId" "{{67DEE444-3D04-4258-B92A-BC1F0FF2CAE4}"
+   setpath "product" "win32UserAppId" "{{0FD05EB4-651E-4E78-A062-515204B47A3A}"
+   setpath "product" "win32x64UserAppId" "{{2E1F05D1-C245-4562-81EE-28188DB6FD17}"
+   setpath "product" "win32arm64UserAppId" "{{57FD70A5-1B8D-4875-9F40-C5553F094828}"
+   setpath "product" "tunnelApplicationName" "lasco-tunnel"
+   setpath "product" "win32TunnelServiceMutex" "lasco-tunnelservice"
+   setpath "product" "win32TunnelMutex" "lasco-tunnel"
+   setpath "product" "win32ContextMenu.x64.clsid" "D910D5E6-B277-4F4A-BDC5-759A34EEE25D"
+   setpath "product" "win32ContextMenu.arm64.clsid" "4852FC55-4A84-4EA1-9C86-D53BE3DF83C0"
 fi
 
 setpath_json "product" "tunnelApplicationConfig" '{}'
@@ -143,7 +142,7 @@ echo "GLOBAL_DIRNAME=\"${GLOBAL_DIRNAME}\""
 echo "ORG_NAME=\"${ORG_NAME}\""
 echo "TUNNEL_APP_NAME=\"${TUNNEL_APP_NAME}\""
 
-if [[ "${DISABLE_UPDATE}" == "yes" ]]; then
+if [[ "${DISABLE_UPDATE}" == "yes" && -f "../patches/disable-update.patch.yet" ]]; then
   mv ../patches/disable-update.patch.yet ../patches/disable-update.patch
 fi
 
@@ -222,12 +221,22 @@ done
 mv .npmrc.bak .npmrc
 # }}}
 
+# {{{ remove unwanted built-in extensions
+echo "Removing unwanted built-in extensions..."
+for ext in git git-base github github-authentication debug-auto-launch debug-server-ready; do
+  if [[ -d "extensions/${ext}" ]]; then
+    rm -rf "extensions/${ext}"
+    echo "  Removed: ${ext}"
+  fi
+done
+# }}}
+
 # package.json
 cp package.json{,.bak}
 
 setpath "package" "version" "${RELEASE_VERSION%-insider}"
 
-replace 's|Microsoft Corporation|VSCodium|' package.json
+replace 's|Microsoft Corporation|Lasco|' package.json
 
 cp resources/server/manifest.json{,.bak}
 
@@ -235,8 +244,8 @@ if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
   setpath "resources/server/manifest" "name" "VSCodium - Insiders"
   setpath "resources/server/manifest" "short_name" "VSCodium - Insiders"
 else
-  setpath "resources/server/manifest" "name" "VSCodium"
-  setpath "resources/server/manifest" "short_name" "VSCodium"
+  setpath "resources/server/manifest" "name" "Lasco"
+  setpath "resources/server/manifest" "short_name" "Lasco"
 fi
 
 # announcements
@@ -244,8 +253,9 @@ replace "s|\\[\\/\\* BUILTIN_ANNOUNCEMENTS \\*\\/\\]|$( tr -d '\n' < ../announce
 
 ../undo_telemetry.sh
 
-replace 's|Microsoft Corporation|VSCodium|' build/lib/electron.ts
-replace 's|([0-9]) Microsoft|\1 VSCodium|' build/lib/electron.ts
+replace 's|Microsoft Corporation|Lasco|' build/lib/electron.ts
+replace 's|([0-9]) Microsoft|\1 Lasco|' build/lib/electron.ts
+replace "s|VS Code HelpBook|Lasco HelpBook|g" build/lib/electron.ts
 
 if [[ "${OS_NAME}" == "linux" ]]; then
   # microsoft adds their apt repo to sources
@@ -279,11 +289,17 @@ if [[ "${OS_NAME}" == "linux" ]]; then
   sed -i 's|https://code.visualstudio.com|https://vscodium.com|' resources/linux/rpm/code.spec.template
 
   # snapcraft.yaml
-  sed -i 's|Visual Studio Code|VSCodium|' resources/linux/rpm/code.spec.template
+  sed -i 's|Visual Studio Code|VSCodium|'  resources/linux/rpm/code.spec.template
 elif [[ "${OS_NAME}" == "windows" ]]; then
+  if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
+    ISS_PATH="build/win32/code-insider.iss"
+  else
+    ISS_PATH="build/win32/code.iss"
+  fi
+
   # code.iss
-  sed -i 's|https://code.visualstudio.com|https://vscodium.com|' build/win32/code.iss
-  sed -i 's|Microsoft Corporation|VSCodium|' build/win32/code.iss
+  sed -i 's|https://code.visualstudio.com|https://www.terracotta.dev|' "${ISS_PATH}"
+  sed -i 's|Microsoft Corporation|Lasco|' "${ISS_PATH}"
 fi
 
 cd ..
