@@ -203,10 +203,12 @@ mv .npmrc .npmrc.bak
 cp ../npmrc .npmrc
 
 for i in {1..5}; do # try 5 times
+  # Use npm install instead of npm ci because patches may modify package.json
+  # dependencies (e.g. @vscodium/native-keymap) without updating the lockfile
   if [[ "${CI_BUILD}" != "no" && "${OS_NAME}" == "osx" ]]; then
-    CXX=clang++ npm ci && break
+    CXX=clang++ npm install && break
   else
-    npm ci && break
+    npm install && break
   fi
 
   if [[ $i == 5 ]]; then
