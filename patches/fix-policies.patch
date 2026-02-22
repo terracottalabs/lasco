@@ -26,7 +26,7 @@ index f8077c2..182d6ce 100644
 --- a/eslint.config.js
 +++ b/eslint.config.js
 @@ -1449,3 +1449,3 @@ export default tseslint.config(
- 						'@vscode/iconv-lite-umd',
+ 						'@vscode/native-watchdog',
 -						'@vscode/policy-watcher',
 +						'@vscodium/policy-watcher',
  						'@vscode/proxy-agent',
@@ -34,11 +34,11 @@ diff --git a/package.json b/package.json
 index b2a6703..3d03e9a 100644
 --- a/package.json
 +++ b/package.json
-@@ -80,3 +80,3 @@
-     "@vscode/iconv-lite-umd": "0.7.1",
+@@ -84,3 +84,3 @@
+     "@vscode/native-watchdog": "^1.4.6",
 -    "@vscode/policy-watcher": "^1.3.2",
 +    "@vscodium/policy-watcher": "^1.3.2-252465",
-     "@vscode/proxy-agent": "^0.36.0",
+     "@vscode/proxy-agent": "^0.37.0",
 diff --git a/src/vs/base/test/node/uri.perf.data.txt b/src/vs/base/test/node/uri.perf.data.txt
 index ee0a24b..881ce36 100644
 --- a/src/vs/base/test/node/uri.perf.data.txt

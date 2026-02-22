@@ -68,9 +68,8 @@ index 187100b..7514367 100644
 @@ -34,4 +34,4 @@ const relativeUrlRequiresHttpsRepository = l10n.t("Relative image URLs require a
  const relativeBadgeUrlRequiresHttpsRepository = l10n.t("Relative badge URLs require a repository with HTTPS protocol to be specified in this package.json.");
 -const apiProposalNotListed = l10n.t("This proposal cannot be used because for this extension the product defines a fixed set of API proposals. You can test your extension but before publishing you MUST reach out to the VS Code team.");
--const bumpEngineForImplicitActivationEvents = l10n.t("This activation event can be removed for extensions targeting engine version ^1.75.0 as VS Code will generate these automatically from your package.json contribution declarations.");
 +const apiProposalNotListed = l10n.t("This proposal cannot be used because for this extension the product defines a fixed set of API proposals. You can test your extension but before publishing you MUST reach out to the Lasco team.");
-+const bumpEngineForImplicitActivationEvents = l10n.t("This activation event can be removed for extensions targeting engine version ^1.75.0 as Lasco will generate these automatically from your package.json contribution declarations.");
+
  const starActivation = l10n.t("Using '*' activation is usually a bad idea as it impacts performance.");
 diff --git a/extensions/git/package.nls.json b/extensions/git/package.nls.json
 index c883415..b3552db 100644
@@ -650,17 +649,6 @@ index ed8043f..ca7a4dc 100644
 -	comment: 'This is used to know how often VS Code updates have failed.';
 +	comment: 'This is used to know how often Lasco updates have failed.';
  };
-diff --git a/src/vs/platform/update/electron-main/updateService.darwin.ts b/src/vs/platform/update/electron-main/updateService.darwin.ts
-index b78ebc5..9b0eb56 100644
---- a/src/vs/platform/update/electron-main/updateService.darwin.ts
-+++ b/src/vs/platform/update/electron-main/updateService.darwin.ts
-@@ -122,4 +122,4 @@ export class DarwinUpdateService extends AbstractUpdateService implements IRelau
- 			owner: 'joaomoreno';
--			newVersion: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'The version number of the new VS Code that has been downloaded.' };
--			comment: 'This is used to know how often VS Code has successfully downloaded the update.';
-+			newVersion: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'The version number of the new Lasco that has been downloaded.' };
-+			comment: 'This is used to know how often Lasco has successfully downloaded the update.';
- 		};
 diff --git a/src/vs/server/node/server.cli.ts b/src/vs/server/node/server.cli.ts
 index 6a0eacf..2959dad 100644
 --- a/src/vs/server/node/server.cli.ts
@@ -780,12 +768,12 @@ diff --git a/src/vs/workbench/contrib/chat/browser/chatSetup/chatSetupProviders.
 index b7c9c49..137d77e 100644
 --- a/src/vs/workbench/contrib/chat/browser/chatSetup/chatSetupProviders.ts
 +++ b/src/vs/workbench/contrib/chat/browser/chatSetup/chatSetupProviders.ts
-@@ -104,3 +104,3 @@ export class SetupAgent extends Disposable implements IChatAgentImplementation {
+@@ -115,3 +115,3 @@ export class SetupAgent extends Disposable implements IChatAgentImplementation {
  			// Register VSCode agent
--			const { disposable: vscodeDisposable } = SetupAgent.doRegisterAgent(instantiationService, chatAgentService, 'setup.vscode', 'vscode', false, localize2('vscodeAgentDescription', "Ask questions about VS Code").value, ChatAgentLocation.Chat, undefined, context, controller);
-+			const { disposable: vscodeDisposable } = SetupAgent.doRegisterAgent(instantiationService, chatAgentService, 'setup.vscode', 'vscode', false, localize2('vscodeAgentDescription', "Ask questions about Lasco").value, ChatAgentLocation.Chat, undefined, context, controller);
+-			const { disposable: vscodeDisposable } = SetupAgent.doRegisterAgent(instantiationService, chatAgentService, 'setup.vscode', 'vscode', false, localize2('vscodeAgentDescription', "Ask questions about VS Code").value, ChatAgentLocation.Chat, ChatModeKind.Agent, context, controller);
++			const { disposable: vscodeDisposable } = SetupAgent.doRegisterAgent(instantiationService, chatAgentService, 'setup.vscode', 'vscode', false, localize2('vscodeAgentDescription', "Ask questions about Lasco").value, ChatAgentLocation.Chat, ChatModeKind.Agent, context, controller);
  			disposables.add(vscodeDisposable);
-@@ -121,4 +121,4 @@ export class SetupAgent extends Disposable implements IChatAgentImplementation {
+@@ -132,4 +132,4 @@ export class SetupAgent extends Disposable implements IChatAgentImplementation {
  				displayName: localize('setupToolDisplayName', "New Workspace"),
 -				modelDescription: 'Scaffold a new workspace in VS Code',
 -				userDescription: localize('setupToolsDescription', "Scaffold a new workspace in VS Code"),
@@ -1110,8 +1098,8 @@ index f92fe12..a5a7e02 100644
 +++ b/src/vs/workbench/contrib/terminalContrib/chatAgentTools/browser/tools/task/runTaskTool.ts
 @@ -153,3 +153,3 @@ export const RunTaskToolData: IToolData = {
  	displayName: localize('runInTerminalTool.displayName', 'Run Task'),
--	modelDescription: 'Runs a VS Code task.\n\n- If you see that an appropriate task exists for building or running code, prefer to use this tool to run the task instead of using the run_in_terminal tool.\n- Make sure that any appropriate build or watch task is running before trying to run tests or execute code.\n- If the user asks to run a task, use this tool to do so.',
-+	modelDescription: 'Runs a Lasco task.\n\n- If you see that an appropriate task exists for building or running code, prefer to use this tool to run the task instead of using the run_in_terminal tool.\n- Make sure that any appropriate build or watch task is running before trying to run tests or execute code.\n- If the user asks to run a task, use this tool to do so.',
+-	modelDescription: `Runs a VS Code task.\n\n- If you see that an appropriate task exists for building or running code, prefer to use this tool to run the task instead of using the ${TerminalToolId.RunInTerminal} tool.\n- Make sure that any appropriate build or watch task is running before trying to run tests or execute code.\n- If the user asks to run a task, use this tool to do so.`,
++	modelDescription: `Runs a Lasco task.\n\n- If you see that an appropriate task exists for building or running code, prefer to use this tool to run the task instead of using the ${TerminalToolId.RunInTerminal} tool.\n- Make sure that any appropriate build or watch task is running before trying to run tests or execute code.\n- If the user asks to run a task, use this tool to do so.`,
  	userDescription: localize('runInTerminalTool.userDescription', 'Run tasks in the workspace'),
 diff --git a/src/vs/workbench/contrib/terminalContrib/voice/browser/terminalVoiceActions.ts b/src/vs/workbench/contrib/terminalContrib/voice/browser/terminalVoiceActions.ts
 index 0f23e5a..27f311e 100644

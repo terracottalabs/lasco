@@ -24,23 +24,21 @@ index ed36151..5b040cc 100644
 +!@vscodium/native-keymap/build/Release/*.node
  
 diff --git a/eslint.config.js b/eslint.config.js
-index 47eeebf..f8077c2 100644
 --- a/eslint.config.js
 +++ b/eslint.config.js
 @@ -1465,3 +1465,3 @@ export default tseslint.config(
  						'node:module',
 -						'native-keymap',
 +						'@vscodium/native-keymap',
- 						'native-watchdog',
+ 						'net',
 diff --git a/package.json b/package.json
-index efeaec1..b2a6703 100644
 --- a/package.json
 +++ b/package.json
-@@ -108,3 +108,3 @@
-     "native-is-elevated": "0.8.0",
+@@ -111,3 +111,3 @@
+     "native-is-elevated": "0.9.0",
 -    "native-keymap": "^3.3.5",
 +    "@vscodium/native-keymap": "3.3.7-258424",
-     "native-watchdog": "^1.4.1",
+     "node-pty": "^1.2.0-beta.10",
 diff --git a/src/vs/platform/environment/test/node/nativeModules.integrationTest.ts b/src/vs/platform/environment/test/node/nativeModules.integrationTest.ts
 index c30c6da..ca6cea2 100644
 --- a/src/vs/platform/environment/test/node/nativeModules.integrationTest.ts
