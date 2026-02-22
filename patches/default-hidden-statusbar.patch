@@ -1,0 +1,28 @@
+diff --git a/src/vs/base/common/product.ts b/src/vs/base/common/product.ts
+--- a/src/vs/base/common/product.ts
++++ b/src/vs/base/common/product.ts
+@@ -242,6 +242,7 @@ export interface IProductConfiguration {
+
+ 	readonly configurationDefaults?: Record<string, unknown>;
++	readonly defaultHiddenStatusBarEntries?: string[];
+ }
+
+ export interface ITunnelApplicationConfig {
+diff --git a/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts b/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts
+--- a/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts
++++ b/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts
+@@ -8,6 +8,7 @@ import { isStatusbarEntryLocation, IStatusbarEntryPriority, StatusbarAlignment }
+ import { hide, show, isAncestorOfActiveElement } from '../../../../base/browser/dom.js';
+ import { IStorageService, StorageScope, StorageTarget } from '../../../../platform/storage/common/storage.js';
+ import { Emitter } from '../../../../base/common/event.js';
++import product from '../../../../platform/product/common/product.js';
+
+ export interface IStatusbarViewModelEntry {
+@@ -52,6 +53,8 @@ export class StatusbarViewModel extends Disposable {
+ 			} catch (error) {
+ 				// ignore parsing errors
+ 			}
++		} else if (product.defaultHiddenStatusBarEntries) {
++			this.hidden = new Set(product.defaultHiddenStatusBarEntries);
+ 		}
+ 	}
