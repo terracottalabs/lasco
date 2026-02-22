@@ -1,0 +1,85 @@
+diff --git a/src/vs/workbench/contrib/debug/browser/debug.contribution.ts b/src/vs/workbench/contrib/debug/browser/debug.contribution.ts
+index 7b2cbce..d1e28f8 100644
+--- a/src/vs/workbench/contrib/debug/browser/debug.contribution.ts
++++ b/src/vs/workbench/contrib/debug/browser/debug.contribution.ts
+@@ -462,17 +462,18 @@ const viewContainer = Registry.as<IViewContainersRegistry>(ViewExtensions.ViewCo
+ 	ctorDescriptor: new SyncDescriptor(DebugViewPaneContainer),
+ 	icon: icons.runViewIcon,
+ 	alwaysUseContainerInfo: true,
++	hideIfEmpty: true,
+ 	order: 3,
+ }, ViewContainerLocation.Sidebar);
+ 
+ // Register default debug views
+ const viewsRegistry = Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry);
+-viewsRegistry.registerViews([{ id: VARIABLES_VIEW_ID, name: nls.localize2('variables', "Variables"), containerIcon: icons.variablesViewIcon, ctorDescriptor: new SyncDescriptor(VariablesView), order: 10, weight: 40, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusVariablesView' }, when: CONTEXT_DEBUG_UX.isEqualTo('default') }], viewContainer);
+-viewsRegistry.registerViews([{ id: WATCH_VIEW_ID, name: nls.localize2('watch', "Watch"), containerIcon: icons.watchViewIcon, ctorDescriptor: new SyncDescriptor(WatchExpressionsView), order: 20, weight: 10, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusWatchView' }, when: CONTEXT_DEBUG_UX.isEqualTo('default') }], viewContainer);
+-viewsRegistry.registerViews([{ id: CALLSTACK_VIEW_ID, name: nls.localize2('callStack', "Call Stack"), containerIcon: icons.callStackViewIcon, ctorDescriptor: new SyncDescriptor(CallStackView), order: 30, weight: 30, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusCallStackView' }, when: CONTEXT_DEBUG_UX.isEqualTo('default') }], viewContainer);
+-viewsRegistry.registerViews([{ id: BREAKPOINTS_VIEW_ID, name: nls.localize2('breakpoints', "Breakpoints"), containerIcon: icons.breakpointsViewIcon, ctorDescriptor: new SyncDescriptor(BreakpointsView), order: 40, weight: 20, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusBreakpointsView' }, when: ContextKeyExpr.or(CONTEXT_BREAKPOINTS_EXIST, CONTEXT_DEBUG_UX.isEqualTo('default'), CONTEXT_HAS_DEBUGGED) }], viewContainer);
+-viewsRegistry.registerViews([{ id: WelcomeView.ID, name: WelcomeView.LABEL, containerIcon: icons.runViewIcon, ctorDescriptor: new SyncDescriptor(WelcomeView), order: 1, weight: 40, canToggleVisibility: true, when: CONTEXT_DEBUG_UX.isEqualTo('simple') }], viewContainer);
+-viewsRegistry.registerViews([{ id: LOADED_SCRIPTS_VIEW_ID, name: nls.localize2('loadedScripts', "Loaded Scripts"), containerIcon: icons.loadedScriptsViewIcon, ctorDescriptor: new SyncDescriptor(LoadedScriptsView), order: 35, weight: 5, canToggleVisibility: true, canMoveView: true, collapsed: true, when: ContextKeyExpr.and(CONTEXT_LOADED_SCRIPTS_SUPPORTED, CONTEXT_DEBUG_UX.isEqualTo('default')) }], viewContainer);
++viewsRegistry.registerViews([{ id: VARIABLES_VIEW_ID, name: nls.localize2('variables', "Variables"), containerIcon: icons.variablesViewIcon, ctorDescriptor: new SyncDescriptor(VariablesView), order: 10, weight: 40, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusVariablesView' }, when: ContextKeyExpr.and(CONTEXT_DEBUG_UX.isEqualTo('default'), ContextKeyExpr.has('config.debug.enabled')) }], viewContainer);
++viewsRegistry.registerViews([{ id: WATCH_VIEW_ID, name: nls.localize2('watch', "Watch"), containerIcon: icons.watchViewIcon, ctorDescriptor: new SyncDescriptor(WatchExpressionsView), order: 20, weight: 10, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusWatchView' }, when: ContextKeyExpr.and(CONTEXT_DEBUG_UX.isEqualTo('default'), ContextKeyExpr.has('config.debug.enabled')) }], viewContainer);
++viewsRegistry.registerViews([{ id: CALLSTACK_VIEW_ID, name: nls.localize2('callStack', "Call Stack"), containerIcon: icons.callStackViewIcon, ctorDescriptor: new SyncDescriptor(CallStackView), order: 30, weight: 30, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusCallStackView' }, when: ContextKeyExpr.and(CONTEXT_DEBUG_UX.isEqualTo('default'), ContextKeyExpr.has('config.debug.enabled')) }], viewContainer);
++viewsRegistry.registerViews([{ id: BREAKPOINTS_VIEW_ID, name: nls.localize2('breakpoints', "Breakpoints"), containerIcon: icons.breakpointsViewIcon, ctorDescriptor: new SyncDescriptor(BreakpointsView), order: 40, weight: 20, canToggleVisibility: true, canMoveView: true, focusCommand: { id: 'workbench.debug.action.focusBreakpointsView' }, when: ContextKeyExpr.and(ContextKeyExpr.or(CONTEXT_BREAKPOINTS_EXIST, CONTEXT_DEBUG_UX.isEqualTo('default'), CONTEXT_HAS_DEBUGGED), ContextKeyExpr.has('config.debug.enabled')) }], viewContainer);
++viewsRegistry.registerViews([{ id: WelcomeView.ID, name: WelcomeView.LABEL, containerIcon: icons.runViewIcon, ctorDescriptor: new SyncDescriptor(WelcomeView), order: 1, weight: 40, canToggleVisibility: true, when: ContextKeyExpr.and(CONTEXT_DEBUG_UX.isEqualTo('simple'), ContextKeyExpr.has('config.debug.enabled')) }], viewContainer);
++viewsRegistry.registerViews([{ id: LOADED_SCRIPTS_VIEW_ID, name: nls.localize2('loadedScripts', "Loaded Scripts"), containerIcon: icons.loadedScriptsViewIcon, ctorDescriptor: new SyncDescriptor(LoadedScriptsView), order: 35, weight: 5, canToggleVisibility: true, canMoveView: true, collapsed: true, when: ContextKeyExpr.and(CONTEXT_LOADED_SCRIPTS_SUPPORTED, CONTEXT_DEBUG_UX.isEqualTo('default'), ContextKeyExpr.has('config.debug.enabled')) }], viewContainer);
+ 
+ // Register disassembly view
+ 
+diff --git a/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts b/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts
+index f6c294e..b3f90f6 100644
+--- a/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts
++++ b/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts
+@@ -126,6 +126,7 @@ export const VIEW_CONTAINER = Registry.as<IViewContainersRegistry>(ViewContainer
+ 		order: 4,
+ 		rejectAddedViews: true,
+ 		alwaysUseContainerInfo: true,
++		hideIfEmpty: true,
+ 	}, ViewContainerLocation.Sidebar);
+ 
+ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration)
+@@ -135,6 +136,12 @@ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration)
+ 		title: localize('extensionsConfigurationTitle', "Extensions"),
+ 		type: 'object',
+ 		properties: {
++			'extensions.sidebar.enabled': {
++				type: 'boolean',
++				default: true,
++				description: localize('extensions.sidebar.enabled', "Controls whether the Extensions sidebar is visible."),
++				scope: ConfigurationScope.APPLICATION,
++			},
+ 			'extensions.autoUpdate': {
+ 				enum: [true, 'onlyEnabledExtensions', false,],
+ 				enumItemLabels: [
+diff --git a/src/vs/workbench/contrib/extensions/browser/extensionsViewlet.ts b/src/vs/workbench/contrib/extensions/browser/extensionsViewlet.ts
+index a939a12..f0993fe 100644
+--- a/src/vs/workbench/contrib/extensions/browser/extensionsViewlet.ts
++++ b/src/vs/workbench/contrib/extensions/browser/extensionsViewlet.ts
+@@ -151,8 +151,13 @@ export class ExtensionsViewletViewsContribution extends Disposable implements IW
+ 			order: -1,
+ 		});
+ 
++		const extensionsEnabledCheck = ContextKeyExpr.has('config.extensions.sidebar.enabled');
++		const gatedDescriptors = viewDescriptors.map(d => ({
++			...d,
++			when: d.when ? ContextKeyExpr.and(d.when, extensionsEnabledCheck) : extensionsEnabledCheck,
++		}));
+ 		const viewRegistry = Registry.as<IViewsRegistry>(Extensions.ViewsRegistry);
+-		viewRegistry.registerViews(viewDescriptors, this.container);
++		viewRegistry.registerViews(gatedDescriptors, this.container);
+ 
+ 		viewRegistry.registerViewWelcomeContent('workbench.views.extensions.marketplaceAccess', {
+ 			content: localize('sign in', "[Sign in to access Extensions Marketplace]({0})", `command:${DEFAULT_ACCOUNT_SIGN_IN_COMMAND}`),
+diff --git a/src/vs/workbench/contrib/scm/browser/scm.contribution.ts b/src/vs/workbench/contrib/scm/browser/scm.contribution.ts
+index 6f533f1..157d375 100644
+--- a/src/vs/workbench/contrib/scm/browser/scm.contribution.ts
++++ b/src/vs/workbench/contrib/scm/browser/scm.contribution.ts
+@@ -125,6 +125,7 @@ viewsRegistry.registerViews([{
+ 	canMoveView: true,
+ 	weight: 40,
+ 	order: 1,
++	when: ContextKeyExpr.has('config.scm.enabled'),
+ 	containerIcon: sourceControlViewIcon,
+ 	openCommandActionDescriptor: {
+ 		id: viewContainer.id,

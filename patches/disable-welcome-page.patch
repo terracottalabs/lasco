@@ -1,0 +1,9 @@
+diff --git a/src/vs/workbench/contrib/welcomeGettingStarted/browser/gettingStarted.contribution.ts b/src/vs/workbench/contrib/welcomeGettingStarted/browser/gettingStarted.contribution.ts
+index b63e894..a1c2f00 100644
+--- a/src/vs/workbench/contrib/welcomeGettingStarted/browser/gettingStarted.contribution.ts
++++ b/src/vs/workbench/contrib/welcomeGettingStarted/browser/gettingStarted.contribution.ts
+@@ -322,3 +322,3 @@ configurationRegistry.registerConfiguration({
+ 			],
+-			'default': 'welcomePage',
++			'default': 'none',
+ 			'description': localize('workbench.startupEditor', "Controls which editor is shown at startup, if none are restored from the previous session.")

@@ -1,0 +1,29 @@
+{
+  "workbench.editorAssociations": {
+    "*.pdf": "pdf.preview"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/.lasco": true,
+    "**/.claude": true,
+    "**/.cursor": true,
+    "**/.vscode": true,
+    "**/node_modules": true,
+    "**/package.json": true,
+    "**/package-lock.json": true,
+    "**/.extension": true,
+    "**/.gitignore": true,
+    "**/.gitattributes": true,
+    "**/.env": true,
+    "**/.infisical.json": true,
+    "**/.python-version": true,
+    "**/.venv": true,
+    "**/scripts": true,
+    "**/CLAUDE.md": true,
+    "**/.mcp.json": true
+  }
+}

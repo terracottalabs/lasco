@@ -17,3 +17,7 @@ build/windows/msi/Files*.wixobj
 sourcemaps/
 stores/snapcraft/insider/*.snap
 stores/snapcraft/stable/*.snap
+lasco/extensions/temp-vsix/
+lasco/template/node_modules/
+lasco/template/scripts/node_modules/
+.lasco/

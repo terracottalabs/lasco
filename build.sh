@@ -34,7 +34,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
     find "../VSCode-darwin-${VSCODE_ARCH}" -print0 | xargs -0 touch -c
 
-    . ../build_cli.sh
+    # CLI build skipped — LASCO doesn't need tunnel/remote functionality
+    # . ../build_cli.sh
 
     VSCODE_PLATFORM="darwin"
   elif [[ "${OS_NAME}" == "windows" ]]; then

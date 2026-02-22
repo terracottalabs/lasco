@@ -46,12 +46,7 @@
   "extensionAllowedBadgeProvidersRegex": [
     "^https:\\/\\/github\\.com\\/[^/]+\\/[^/]+\\/(actions\\/)?workflows\\/.*badge\\.svg"
   ],
-  "extensionsEnabledWithApiProposalVersion": [
-    "GitHub.copilot-chat",
-    "ms-vscode.vscode-commander",
-    "ms-vscode.vscode-copilot-vision",
-    "GitHub.vscode-pull-request-github"
-  ],
+  "extensionsEnabledWithApiProposalVersion": [],
   "extensionEnabledApiProposals": {
     "mrleemurray.theme-2026": [
       "css"
@@ -428,6 +423,9 @@
       "resolvers",
       "contribRemoteHelp",
       "contribViewsRemote"
+    ],
+    "vscode.simple-browser": [
+      "externalUriOpener"
     ]
   },
   "extensionKind": {
@@ -607,5 +605,67 @@
     "gruntfuggly.todo-tree": {
       "default": false
     }
-  }
+  },
+  "configurationDefaults": {
+    "workbench.colorTheme": "Default Light Modern",
+    "git.enabled": false,
+    "git.autoRepositoryDetection": false,
+    "git.decorations.enabled": false,
+    "debug.showInStatusBar": "never",
+    "debug.toolBarLocation": "hidden",
+    "extensions.autoUpdate": false,
+    "extensions.autoCheckUpdates": false,
+    "workbench.startupEditor": "none",
+    "workbench.sideBar.location": "left",
+    "workbench.panel.defaultLocation": "bottom",
+    "workbench.enableExperiments": false,
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "editor.minimap.enabled": false,
+    "breadcrumbs.enabled": true,
+    "window.titleBarStyle": "custom",
+    "telemetry.telemetryLevel": "off",
+    "update.mode": "none",
+    "chat.disableAIFeatures": true,
+    "terminal.integrated.enabled": false,
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/.lasco": true,
+      "**/.claude": true,
+      "**/.cursor": true,
+      "**/.vscode": true,
+      "**/scripts": true,
+      "**/node_modules": true,
+      "**/package.json": true,
+      "**/package-lock.json": true,
+      "**/CLAUDE.md": true,
+      "**/.gitignore": true,
+      "**/.gitattributes": true,
+      "**/.mcp.json": true
+    },
+    "workbench.editorAssociations": {
+      "*.pdf": "pdf.preview"
+    },
+    "lasco.logLevel": "info",
+    "workbench.editor.splitOnDragAndDrop": false,
+    "workbench.editor.openPositioning": "right",
+    "workbench.editor.enablePreview": false,
+    "workbench.list.openMode": "singleClick",
+    "workbench.layoutControl.enabled": false,
+    "outline.enabled": false,
+    "timeline.enabled": false,
+    "scm.enabled": false,
+    "debug.enabled": false,
+    "extensions.sidebar.enabled": true
+  },
+  "builtInExtensions": [],
+  "defaultChatAgent": {},
+  "trustedExtensionAuthAccess": {},
+  "trustedExtensionProtocolHandlers": [
+    "Terracotta.lasco"
+  ],
+  "webviewContentExternalBaseUrlTemplate": ""
 }

@@ -1,0 +1,12 @@
+#!/bin/sh
+# Node.js runtime wrapper — uses Electron's bundled Node.js
+ELECTRON_PATH="${VSCODE_GIT_ASKPASS_NODE:-}"
+if [ -z "$ELECTRON_PATH" ] || [ ! -f "$ELECTRON_PATH" ]; then
+  ELECTRON_PATH=$(command -v node 2>/dev/null || true)
+fi
+if [ -z "$ELECTRON_PATH" ]; then
+  echo "Error: No Node.js runtime found. Open this project in LASCO." >&2
+  exit 1
+fi
+export ELECTRON_RUN_AS_NODE=1
+exec "$ELECTRON_PATH" "$@"
