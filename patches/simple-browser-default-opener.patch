@@ -1,5 +1,5 @@
 diff --git a/extensions/simple-browser/package.json b/extensions/simple-browser/package.json
-index 79802e7..b0299e9 100644
+index 0d558ee..73f1f8b 100644
 --- a/extensions/simple-browser/package.json
 +++ b/extensions/simple-browser/package.json
 @@ -35,6 +35,11 @@
@@ -8,8 +8,7 @@ index 79802e7..b0299e9 100644
    "contributes": {
 +    "configurationDefaults": {
 +      "workbench.externalUriOpeners": {
-+        "http://*": "simpleBrowser.open",
-+        "https://*": "simpleBrowser.open"
++        "http://*": "simpleBrowser.open"
 +      }
 +    },
      "commands": [

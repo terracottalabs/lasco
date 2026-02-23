@@ -1,22 +1,26 @@
 diff --git a/src/vs/base/common/product.ts b/src/vs/base/common/product.ts
 --- a/src/vs/base/common/product.ts
 +++ b/src/vs/base/common/product.ts
-@@ -231,4 +231,5 @@
+@@ -230,6 +230,7 @@
+ 	readonly remoteDefaultExtensionsIfInstalledLocally?: string[];
+
  	readonly extensionConfigurationPolicy?: IStringDictionary<IPolicy>;
 +	readonly defaultHiddenStatusBarEntries?: string[];
  }
- 
+
  export interface ITunnelApplicationConfig {
 diff --git a/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts b/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts
 --- a/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts
 +++ b/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts
-@@ -9,4 +9,5 @@ import { hide, show, isAncestorOfActiveElement } from '../../../../base/browser/dom.js';
+@@ -8,6 +8,7 @@
+ import { hide, show, isAncestorOfActiveElement } from '../../../../base/browser/dom.js';
  import { IStorageService, StorageScope, StorageTarget } from '../../../../platform/storage/common/storage.js';
  import { Emitter } from '../../../../base/common/event.js';
 +import product from '../../../../platform/product/common/product.js';
  
  export interface IStatusbarViewModelEntry {
-@@ -52,6 +53,8 @@ export class StatusbarViewModel extends Disposable {
+ 	readonly id: string;
+@@ -52,6 +53,8 @@
  			} catch (error) {
  				// ignore parsing errors
  			}
@@ -24,4 +28,4 @@ diff --git a/src/vs/workbench/browser/parts/statusbar/statusbarModel.ts b/src/vs
 +			this.hidden = new Set(product.defaultHiddenStatusBarEntries);
  		}
  	}
- 
+

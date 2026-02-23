@@ -1,8 +1,9 @@
 diff --git a/src/vs/platform/extensionManagement/common/extensionGalleryService.ts b/src/vs/platform/extensionManagement/common/extensionGalleryService.ts
-index 5974768..876f779 100644
+index 4034954..06da4ed 100644
 --- a/src/vs/platform/extensionManagement/common/extensionGalleryService.ts
 +++ b/src/vs/platform/extensionManagement/common/extensionGalleryService.ts
-@@ -1788,2 +1788,8 @@ export abstract class AbstractExtensionGalleryService implements IExtensionGalle
+@@ -1940,5 +1940,11 @@ export abstract class AbstractExtensionGalleryService implements IExtensionGalle
+ 		}
  
 +		const excludeUnsafes = this.configurationService.getValue('extensions.excludeUnsafes') ?? true;
 +
@@ -11,11 +12,13 @@ index 5974768..876f779 100644
 +		}
 +
  		const context = await this.requestService.request({
+ 			type: 'GET',
+ 			url: this.extensionsControlUrl,
 diff --git a/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts b/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts
-index 4c44d3b..fe989e0 100644
+index 6956d79..d6296a4 100644
 --- a/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts
 +++ b/src/vs/workbench/contrib/extensions/browser/extensions.contribution.ts
-@@ -294,2 +294,9 @@ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration)
+@@ -311,3 +311,10 @@ Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Configuration)
  			},
 +			'extensions.excludeUnsafes': {
 +				scope: ConfigurationScope.MACHINE,
@@ -25,3 +28,4 @@ index 4c44d3b..fe989e0 100644
 +				tags: ['usesOnlineServices']
 +			},
  		}
+ 	});
