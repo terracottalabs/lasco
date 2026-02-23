@@ -74,6 +74,9 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
       npm run gulp "vscode-win32-${VSCODE_ARCH}-min-ci"
 
+      # Bundle vcruntime140.dll alongside the app for fresh Windows machines
+      cp "build/win32/vcruntime140.dll" "../VSCode-win32-${VSCODE_ARCH}/vcruntime140.dll"
+
       remove_unwanted_extensions "../VSCode-win32-${VSCODE_ARCH}/resources/app/extensions"
 
       if [[ "${VSCODE_ARCH}" != "x64" ]]; then
