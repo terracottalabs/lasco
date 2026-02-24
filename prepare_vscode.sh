@@ -341,4 +341,39 @@ else
 fi
 # }}}
 
+# {{{ Fix: strip non-Windows prebuilds to prevent rcedit failures on cross-compiled builds
+# node-pty ships prebuilds for all platforms; rcedit chokes on non-PE binaries (darwin/linux .node files).
+# 1) Add node-pty/prebuilds/** to .moduleignore so packageTask strips them
+node -e "
+  const fs = require('fs');
+  const file = 'build/.moduleignore';
+  let content = fs.readFileSync(file, 'utf8');
+  if (!content.includes('node-pty/prebuilds/**')) {
+    content = content.replace(
+      'node-pty/build/**',
+      'node-pty/build/**\nnode-pty/prebuilds/**'
+    );
+    fs.writeFileSync(file, content);
+    console.log('Added node-pty/prebuilds/** to .moduleignore');
+  } else {
+    console.log('node-pty/prebuilds/** already in .moduleignore');
+  }
+"
+# 2) Add ignore patterns to patchWin32DependenciesTask glob so rcedit skips non-win32 .node files
+node -e "
+  const fs = require('fs');
+  const file = 'build/gulpfile.vscode.ts';
+  let src = fs.readFileSync(file, 'utf8');
+  const oldPattern = \"ignore: 'extensions/node_modules/@parcel/watcher/**'\";
+  const newPattern = \"ignore: ['extensions/node_modules/@parcel/watcher/**', '**/prebuilds/darwin-*/**', '**/prebuilds/linux-*/**']\";
+  if (src.includes(oldPattern)) {
+    src = src.replace(oldPattern, newPattern);
+    fs.writeFileSync(file, src);
+    console.log('Added darwin/linux prebuild ignore patterns to patchWin32DependenciesTask');
+  } else {
+    console.log('patchWin32DependenciesTask already patched or pattern not found');
+  }
+"
+# }}}
+
 cd ..
