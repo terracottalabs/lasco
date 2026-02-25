@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(superdoc-annotator *)",
+      "Skill(document-verifier *)",
+      "Skill(merger-control-analysis *)",
+      "Skill(agent-browser *)",
+      "Bash(scripts/lasco-node scripts/superdoc-bridge.js:*)",
+      "Bash(scripts/lasco-node scripts/browser-viewer-server.js)",
+      "Bash(agent-browser:*)",
+      "Bash(AGENT_BROWSER_STREAM_PORT=9223 agent-browser open:*)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)",
+      "Bash(textutil:*)",
+      "Bash(code --list-extensions:*)",
+      "Bash(curl:*)",
+      "mcp__lasco__*"
+    ]
+  }
+}

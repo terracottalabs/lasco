@@ -89,4 +89,8 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
   fi
 
   cd ..
+
+  # Cleanup unnecessary extensions to reduce app size
+  echo "📦 Cleaning up extensions..."
+  . ./cleanup-extensions.sh "VSCode-${VSCODE_PLATFORM}-${VSCODE_ARCH}/Lasco.app/Contents/Resources/app/extensions"
 fi

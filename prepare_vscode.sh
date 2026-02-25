@@ -34,23 +34,21 @@ setpath_json() {
   set -x
 }
 
-setpath "product" "licenseUrl" "https://github.com/rocky-terracotta/lasco-demo/blob/main/LICENSE"
-setpath "product" "reportIssueUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
-setpath "product" "checksumFailMoreInfoUrl" "https://github.com/rocky-terracotta/lasco-demo"
-setpath "product" "documentationUrl" "https://github.com/rocky-terracotta/lasco-demo#documentation"
+setpath "product" "licenseUrl" ""
+setpath "product" "reportIssueUrl" ""
+setpath "product" "checksumFailMoreInfoUrl" ""
+setpath "product" "documentationUrl" ""
 setpath_json "product" "extensionsGallery" '{}'
 
-setpath "product" "introductoryVideosUrl" "https://github.com/rocky-terracotta/lasco-demo#getting-started"
-setpath "product" "keyboardShortcutsUrlLinux" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
-setpath "product" "keyboardShortcutsUrlMac" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
-setpath "product" "keyboardShortcutsUrlWin" "https://github.com/rocky-terracotta/lasco-demo#keyboard-shortcuts"
-setpath "product" "licenseUrl" "https://github.com/rocky-terracotta/lasco-demo/blob/main/LICENSE"
-setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org", "https://github.com", "https://getlasco.com"]'
-setpath "product" "releaseNotesUrl" "https://github.com/rocky-terracotta/lasco-demo/releases"
-setpath "product" "reportIssueUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
-setpath "product" "requestFeatureUrl" "https://github.com/rocky-terracotta/lasco-demo/issues/new"
-setpath "product" "tipsAndTricksUrl" "https://github.com/rocky-terracotta/lasco-demo#tips"
-setpath "product" "twitterUrl" "https://github.com/rocky-terracotta/lasco-demo"
+setpath "product" "introductoryVideosUrl" ""
+setpath "product" "keyboardShortcutsUrlLinux" ""
+setpath "product" "keyboardShortcutsUrlMac" ""
+setpath "product" "keyboardShortcutsUrlWin" ""
+setpath_json "product" "linkProtectionTrustedDomains" '["https://open-vsx.org", "https://github.com", "https://getlasco.com", "https://legalref.judiciary.hk", "https://www.judiciary.hk", "https://judiciary.hk", "https://caselaw.nationalarchives.gov.uk", "https://www.elegislation.gov.hk", "https://elegislation.gov.hk", "https://www.hklii.hk", "https://hklii.hk"]'
+setpath "product" "releaseNotesUrl" ""
+setpath "product" "requestFeatureUrl" ""
+setpath "product" "tipsAndTricksUrl" ""
+setpath "product" "twitterUrl" ""
 
 if [[ "${DISABLE_UPDATE}" != "yes" ]]; then
   setpath "product" "updateUrl" "https://raw.githubusercontent.com/VSCodium/versions/refs/heads/master"

@@ -2,6 +2,7 @@
   "workbench.editorAssociations": {
     "*.pdf": "pdf.preview"
   },
+  "claudeCode.environmentVariables": [],
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

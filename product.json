@@ -627,6 +627,7 @@
     "update.mode": "none",
     "chat.disableAIFeatures": true,
     "terminal.integrated.enabled": false,
+    "terminal.explorerKind": "none",
     "files.exclude": {
       "**/.git": true,
       "**/.svn": true,
@@ -678,6 +679,19 @@
   "trustedExtensionAuthAccess": {},
   "trustedExtensionProtocolHandlers": [
     "Terracotta.lasco"
+  ],
+  "linkProtectionTrustedDomains": [
+    "https://open-vsx.org",
+    "https://github.com",
+    "https://getlasco.com",
+    "https://legalref.judiciary.hk",
+    "https://www.judiciary.hk",
+    "https://judiciary.hk",
+    "https://caselaw.nationalarchives.gov.uk",
+    "https://www.elegislation.gov.hk",
+    "https://elegislation.gov.hk",
+    "https://www.hklii.hk",
+    "https://hklii.hk"
   ],
   "webviewContentExternalBaseUrlTemplate": ""
 }
