@@ -1,0 +1,15 @@
+diff --git a/build/lib/electron.ts b/build/lib/electron.ts
+index 8cc36de..836a14e 100644
+--- a/build/lib/electron.ts
++++ b/build/lib/electron.ts
+@@ -105,8 +105,8 @@ export const config = {
+ 	version: electronVersion,
+ 	tag: product.electronRepository ? `v${electronVersion}-${msBuildId}` : undefined,
+ 	productAppName: product.nameLong,
+-	companyName: 'Microsoft Corporation',
+-	copyright: 'Copyright (C) 2025 Microsoft. All rights reserved',
++	companyName: 'Terracotta',
++	copyright: 'Copyright (C) 2025 Terracotta. All rights reserved',
+ 	darwinIcon: 'resources/darwin/code.icns',
+ 	darwinBundleIdentifier: product.darwinBundleIdentifier,
+ 	darwinApplicationCategoryType: 'public.app-category.developer-tools',
