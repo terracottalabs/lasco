@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
-# sign-local.sh — Codesign, notarize, and staple Lasco.app for distribution
+# sign-local.sh — Codesign, notarize, staple, and optionally publish Lasco.app
 #
 # Usage:
 #   ./sign-local.sh              # sign + notarize + staple + zip
 #   ./sign-local.sh --sign-only  # just codesign (skip notarization)
 #   ./sign-local.sh --dmg        # also create DMG after notarization
+#   ./sign-local.sh --publish    # also upload ZIP + latest.json to R2 for OTA updates
+#   ./sign-local.sh --dmg --publish  # full release: sign, notarize, DMG, publish
 #
 # Prerequisites:
 #   - "Developer ID Application: Terracotta Cyber Solutions Limited (M4WGLKG3TR)" in keychain
 #   - notarytool keychain profile "lasco" (xcrun notarytool store-credentials lasco)
 #   - @electron/osx-sign installed in vscode/node_modules
+#   - rclone with R2 remote configured (brew install rclone) — for --publish
 
 set -euo pipefail
 
@@ -26,11 +29,14 @@ VERSION="$(plutil -extract CFBundleShortVersionString raw "${APP_PATH}/Contents/
 
 SIGN_ONLY=false
 BUILD_DMG=false
+PUBLISH=false
+RELEASES_BASE_URL="https://releases.lasco.dev"
 
 for arg in "$@"; do
   case "$arg" in
     --sign-only) SIGN_ONLY=true ;;
     --dmg) BUILD_DMG=true ;;
+    --publish) PUBLISH=true ;;
   esac
 done
 
@@ -144,17 +150,95 @@ rm -f "${ASSET_ZIP}"
 ditto -c -k --keepParent "${APP_PATH}" "${ASSET_ZIP}"
 echo "  ZIP: ${ASSET_ZIP} ($(du -h "${ASSET_ZIP}" | cut -f1))"
 
-# Optional DMG
-if [ "$BUILD_DMG" = true ]; then
+# DMG (always built for publishing, optional otherwise)
+if [ "$BUILD_DMG" = true ] || [ "$PUBLISH" = true ]; then
+  ASSET_DMG="${SCRIPT_DIR}/assets/Lasco-darwin-${ARCH}-${VERSION}.dmg"
+  rm -f "${ASSET_DMG}"
   if command -v create-dmg &>/dev/null; then
-    create-dmg "${APP_PATH}" "${SCRIPT_DIR}/assets/" 2>/dev/null || true
-    echo "  DMG: $(ls "${SCRIPT_DIR}"/assets/*.dmg 2>/dev/null || echo 'failed')"
+    create-dmg \
+      --volname "Lasco" \
+      --background "${SCRIPT_DIR}/assets/dmg-background.png" \
+      --window-pos 200 120 \
+      --window-size 660 480 \
+      --icon-size 120 \
+      --icon "Lasco.app" 170 180 \
+      --hide-extension "Lasco.app" \
+      --app-drop-link 490 180 \
+      --text-size 14 \
+      "${ASSET_DMG}" \
+      "${APP_PATH}" 2>&1 || true
+    if [ -f "${ASSET_DMG}" ]; then
+      echo "  DMG: ${ASSET_DMG} ($(du -h "${ASSET_DMG}" | cut -f1))"
+    else
+      echo "  DMG: creation failed"
+      [ "$PUBLISH" = true ] && { echo "Error: DMG required for publishing"; exit 1; }
+    fi
   else
-    echo "  DMG: skipped (create-dmg not found — npm install -g create-dmg)"
+    echo "  DMG: skipped (create-dmg not found — brew install create-dmg)"
+    [ "$PUBLISH" = true ] && { echo "Error: DMG required for publishing"; exit 1; }
   fi
 fi
 
 echo ""
+
+# ── Publish to R2 for OTA updates ────────────────────────────────
+
+if [ "$PUBLISH" = true ]; then
+  echo "=== Publishing OTA update to R2 ==="
+
+  command -v rclone &>/dev/null \
+    || { echo "Error: rclone not found. Run: brew install rclone"; exit 1; }
+
+  ASSET_DMG="${SCRIPT_DIR}/assets/Lasco-darwin-${ARCH}-${VERSION}.dmg"
+  [ -f "${ASSET_DMG}" ] || { echo "Error: DMG not found at ${ASSET_DMG}"; exit 1; }
+
+  DMG_FILENAME="$(basename "${ASSET_DMG}")"
+  SHA1_HASH="$(shasum -a 1 "${ASSET_DMG}" | awk '{print $1}')"
+  SHA256_HASH="$(shasum -a 256 "${ASSET_DMG}" | awk '{print $1}')"
+  BUILD_VERSION="$(echo -n "${VERSION}" | shasum -a 1 | awk '{print $1}')"
+  TIMESTAMP="$(node -e 'console.log(Date.now())')"
+
+  # Transform version: 1.108.2 → 1.108.2.0
+  PRODUCT_VERSION="${VERSION}.0"
+
+  # Generate latest.json
+  LATEST_JSON=$(cat <<EOJSON
+{
+  "url": "${RELEASES_BASE_URL}/artifacts/${DMG_FILENAME}",
+  "name": "${VERSION}",
+  "version": "${BUILD_VERSION}",
+  "productVersion": "${PRODUCT_VERSION}",
+  "hash": "${SHA1_HASH}",
+  "sha256hash": "${SHA256_HASH}",
+  "timestamp": ${TIMESTAMP}
+}
+EOJSON
+  )
+
+  LATEST_JSON_FILE="${SCRIPT_DIR}/assets/latest.json"
+  echo "${LATEST_JSON}" > "${LATEST_JSON_FILE}"
+
+  echo "  latest.json:"
+  cat "${LATEST_JSON_FILE}"
+  echo ""
+
+  # Upload DMG artifact (rclone remote already points to lasco-releases bucket)
+  echo "  Uploading ${DMG_FILENAME} to R2..."
+  rclone copyto "${ASSET_DMG}" "r2:artifacts/${DMG_FILENAME}"
+
+  # Upload latest.json
+  R2_MANIFEST_KEY="stable/darwin/${ARCH}/latest.json"
+  echo "  Uploading ${R2_MANIFEST_KEY} to R2..."
+  rclone copyto "${LATEST_JSON_FILE}" "r2:${R2_MANIFEST_KEY}"
+
+  rm -f "${LATEST_JSON_FILE}"
+
+  echo ""
+  echo "  Published! Verify:"
+  echo "    curl ${RELEASES_BASE_URL}/${R2_MANIFEST_KEY}"
+  echo ""
+fi
+
 echo "=== Done ==="
 echo ""
 spctl --assess -vv --type install "${APP_PATH}" 2>&1 || true

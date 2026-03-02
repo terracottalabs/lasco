@@ -13,7 +13,7 @@ lasco/
 │   └── template/            # Workspace template (CLAUDE.md, scripts, package.json)
 ├── assets/                  # Distribution outputs (ZIP, DMG)
 │   └── dmg-background.png   # DMG background image (#180400, MLK quote)
-├── sign-local.sh            # Codesign + notarize + staple + DMG
+├── sign-local.sh            # Codesign + notarize + staple + DMG + OTA publish
 ├── build.sh                 # Full VSCodium compilation from source
 ├── patches/                 # Branding and build patches
 ├── icons/                   # App icons
@@ -77,9 +77,11 @@ rm -rf "$tmpdir"
 3. **Codesign, notarize, staple, and create ZIP**:
 
 ```bash
-./sign-local.sh              # full pipeline: sign → notarize → staple → zip
-./sign-local.sh --sign-only  # just codesign (skip notarization, for local testing)
-./sign-local.sh --dmg        # also create DMG after notarization
+./sign-local.sh                   # sign → notarize → staple → zip
+./sign-local.sh --sign-only       # just codesign (skip notarization, for local testing)
+./sign-local.sh --dmg             # also create DMG
+./sign-local.sh --publish         # also upload ZIP + latest.json to R2 for OTA updates
+./sign-local.sh --dmg --publish   # full release: sign, notarize, DMG, and publish OTA
 ```
 
 4. **Create DMG manually** (with custom background):
@@ -103,6 +105,55 @@ create-dmg \
 
 - `assets/Lasco-darwin-arm64-VERSION.zip` — signed + notarized + stapled ZIP
 - `assets/Lasco-darwin-arm64-VERSION.dmg` — DMG with drag-to-Applications layout
+
+### OTA Updates
+
+Existing Lasco installs check for updates on launch via the built-in Electron update mechanism. The app fetches `https://releases.lasco.dev/stable/darwin/{arch}/latest.json` and compares versions using semver.
+
+**Publishing an update** (part of `--publish` flag):
+
+1. Builds DMG from the signed + notarized + stapled app
+2. Computes SHA-1 + SHA-256 of the DMG
+3. Generates `latest.json` with download URL, version, and hashes
+4. Uploads both to the `lasco-releases` R2 bucket via `rclone`
+
+**R2 bucket layout** (`lasco-releases`, public via `releases.lasco.dev`):
+
+```
+stable/darwin/arm64/latest.json            ← version manifest
+stable/darwin/x64/latest.json              ← (future: Intel build)
+artifacts/Lasco-darwin-arm64-1.108.2.dmg   ← signed app DMG
+```
+
+**rclone R2 remote**: The `r2` remote endpoint already includes the `lasco-releases` bucket path. Do NOT prepend `lasco-releases` to keys:
+```bash
+rclone copyto file.dmg r2:artifacts/file.dmg      # correct
+rclone copyto file.json r2:stable/darwin/arm64/latest.json  # correct
+```
+
+**`latest.json` schema:**
+
+```json
+{
+  "url": "https://releases.lasco.dev/artifacts/Lasco-darwin-arm64-1.108.2.dmg",
+  "name": "1.108.2",
+  "version": "<sha1 of version string>",
+  "productVersion": "1.108.2.0",
+  "hash": "<sha1 of dmg>",
+  "sha256hash": "<sha256 of dmg>",
+  "timestamp": 1740000000000
+}
+```
+
+**Prerequisites for `--publish`:**
+
+- `rclone` installed (`brew install rclone`) with R2 remote configured
+
+**Verify a published update:**
+
+```bash
+curl https://releases.lasco.dev/stable/darwin/arm64/latest.json
+```
 
 ### Codesign Identity
 

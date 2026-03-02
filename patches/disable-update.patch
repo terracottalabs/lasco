@@ -5,5 +5,5 @@ index d96926b..43f5d90 100644
 @@ -20,3 +20,3 @@ configurationRegistry.registerConfiguration({
  			enum: ['none', 'manual', 'start', 'default'],
 -			default: 'default',
-+			default: 'none',
++			default: 'start',
  			scope: ConfigurationScope.APPLICATION,

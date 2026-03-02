@@ -51,12 +51,12 @@ setpath "product" "tipsAndTricksUrl" ""
 setpath "product" "twitterUrl" ""
 
 if [[ "${DISABLE_UPDATE}" != "yes" ]]; then
-  setpath "product" "updateUrl" "https://raw.githubusercontent.com/VSCodium/versions/refs/heads/master"
+  setpath "product" "updateUrl" "https://releases.lasco.dev"
 
   if [[ "${VSCODE_QUALITY}" == "insider" ]]; then
-    setpath "product" "downloadUrl" "https://github.com/VSCodium/vscodium-insiders/releases"
+    setpath "product" "downloadUrl" "https://getlasco.com/download"
   else
-    setpath "product" "downloadUrl" "https://github.com/VSCodium/vscodium/releases"
+    setpath "product" "downloadUrl" "https://getlasco.com/download"
   fi
 fi
 
@@ -221,27 +221,8 @@ done
 mv .npmrc.bak .npmrc
 # }}}
 
-# {{{ remove unwanted built-in extensions
-echo "Removing unwanted built-in extensions..."
-for ext in \
-  git git-base github github-authentication debug-auto-launch debug-server-ready \
-  bat clojure coffeescript cpp csharp dart diff docker dotenv fsharp go groovy \
-  handlebars hlsl ini java javascript julia latex less log lua make objective-c \
-  perl php powershell pug python r razor restructuredtext ruby rust scss \
-  shaderlab shellscript sql swift typescript-basics vb \
-  emmet extension-editing grunt gulp jake npm ipynb notebook-renderers \
-  merge-conflict tunnel-forwarding terminal-suggest prompt-basics \
-  mermaid-chat-features microsoft-authentication \
-  theme-abyss theme-kimbie-dark theme-monokai theme-monokai-dimmed \
-  theme-red theme-seti theme-solarized-dark theme-tomorrow-night-blue \
-  vscode-api-tests vscode-colorize-perf-tests vscode-colorize-tests \
-  vscode-test-resolver; do
-  if [[ -d "extensions/${ext}" ]]; then
-    rm -rf "extensions/${ext}"
-    echo "  Removed: ${ext}"
-  fi
-done
-# }}}
+# Extension cleanup happens post-build via cleanup-extensions.sh in build.sh.
+# Do NOT remove extensions here — they must be present during compilation.
 
 # package.json
 cp package.json{,.bak}
