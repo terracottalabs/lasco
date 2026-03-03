@@ -378,6 +378,18 @@ if [[ -f "../posthog-init.js" && -f "${WORKBENCH_HTML}" ]]; then
         process.exit(1);
       }
 
+      // 3. Recalculate CSP hash for the modified inline script
+      const crypto = require('crypto');
+      const scriptMatch = html.match(/<script[^>]*>([\\\s\\\S]*?)<\\/script>/);
+      if (scriptMatch) {
+        const newHash = crypto.createHash('sha256').update(scriptMatch[1], 'utf8').digest('base64');
+        html = html.replace(
+          /sha256-[A-Za-z0-9+\\/=]+/,
+          'sha256-' + newHash
+        );
+        console.log('Updated CSP hash to: sha256-' + newHash);
+      }
+
       fs.writeFileSync('${WEBVIEW_HTML}', html);
       console.log('Webview index.html patched successfully');
     "
